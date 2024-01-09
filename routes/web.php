@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController as Auth;
+use App\Http\Controllers\Error\ErrorController as Error;
+use App\Http\Controllers\Admin\DashboardController as DashboardAdmin;
+use App\Http\Controllers\Siswa\DashboardController as DashboardSiswa;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['guest'])->group(function(){
+    Route::get('/', [Auth::class, 'index'])->name('get.login');
+    Route::post('/login', [Auth::class, 'login'])->name('post.login');
+
+    Route::get('/aksesditolak', [Error::class, 'accessDenied'])->name('get.accessdenied');
+});
+
+Route::middleware(['auth:jwt', 'cekrole.admin'])->prefix('admin')->name('admin.')->group(function(){
+    Route::get('/dashboard', [DashboardAdmin::class, 'index'])->name('get.dashboard');
+});
+
+Route::middleware(['auth:jwt', 'cekrole.siswa'])->prefix('siswa')->name('siswa.')->group(function(){
+    Route::get('/dashboard', [DashboardSiswa::class, 'index'])->name('get.dashboard');
 });
