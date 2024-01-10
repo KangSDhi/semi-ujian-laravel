@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('soal', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_soal');
             $table->string('link');
             $table->unsignedBigInteger('jurusan_id')->nullable();
             $table->datetime('waktu_mulai');
