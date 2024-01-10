@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AuthController as Auth;
 use App\Http\Controllers\Error\ErrorController as Error;
 use App\Http\Controllers\Admin\DashboardController as DashboardAdmin;
 use App\Http\Controllers\Siswa\DashboardController as DashboardSiswa;
+use App\Http\Controllers\Siswa\SoalController as SoalSiswa;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,6 @@ Route::middleware(['auth:jwt', 'cekrole.admin'])->prefix('admin')->name('admin.'
 
 Route::middleware(['auth:jwt', 'cekrole.siswa'])->prefix('siswa')->name('siswa.')->group(function(){
     Route::get('/dashboard', [DashboardSiswa::class, 'index'])->name('get.dashboard');
+    Route::get('/soal', [SoalSiswa::class, 'getDataSoal'])->name('get.soal');
+    Route::get('/logout', [Auth::class, 'logout'])->name('get.logout');
 });

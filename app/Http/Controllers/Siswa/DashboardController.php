@@ -7,7 +7,18 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+    private $user;
+
+    public function __construct(){
+        if (!auth('jwt')->guest()) {
+            $user = auth('jwt')->user();
+            $this->user = $user;
+        }
+    }
+
     public function index(){
-        echo "Dashboard Siswa";
+        $data["title"] = "Dashboard Siswa";
+        $data["user"] = $this->user;
+        return view("siswa.dashboard", $data);
     }
 }
