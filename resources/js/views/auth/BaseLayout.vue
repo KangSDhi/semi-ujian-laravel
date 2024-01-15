@@ -10,7 +10,33 @@
 </template>
 
 <script>
-export default {
+import axios from "axios";
 
+export default {
+    data(){
+        return {
+            token: localStorage.getItem("auth_token"),
+        }
+    },
+    mounted(){
+        this.checkAuth()
+    },
+    methods: {
+        checkAuth(){
+            axios.get("/api/check/auth", {
+                headers: {
+                    "Authorization": "Bearer " + this.token
+                }
+            })
+            .then(({ data }) => {
+                if (data.data.role_id == 2) {
+                    this.$router.push({ name: "Dashboard Siswa" });
+                }
+            })
+            .catch(({ response }) => {
+                console.error(response.status);
+            });
+        }
+    }
 }
 </script>

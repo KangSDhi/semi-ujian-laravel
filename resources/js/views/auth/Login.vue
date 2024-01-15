@@ -112,37 +112,54 @@ export default {
                 });
         },
         login() {
+            this.resetForm();
             axios
                 .post("/api/login", {
                     emailOrNisn: this.emailOrNisn,
                     password: this.password,
                 })
                 .then(({ data }) => {
-                    console.log(data);
+                    console.log(data.data.user.role_id);
+                    localStorage.setItem("auth_token", data.data.token);
+                    if (data.data.user.role_id == 1) {
+                        
+                    } else if (data.data.user.role_id == 2){
+                        this.$router.push({ name: "Dashboard Siswa" });
+                    }
                 })
                 .catch(({ response }) => {
-                    console.error(response);
-                    if (response.status == 422) {
-                        const errorMessages = response.data.errors;
-                        Object.keys(errorMessages).forEach((key) => {
+                    console.error(this.isObject(response.data.error_message));
+                    const errorMessage = response.data.error_message;
+                    if (this.isObject(errorMessage)) {
+                        Object.keys(errorMessage).forEach((key) => {
                             if (key == "emailOrNisn") {
                                 this.isEmailError = true;
-                                this.emailErrorMessage = errorMessages[key][0];
+                                this.emailErrorMessage = errorMessage[key][0];
                             }
 
                             if (key == "password") {
                                 this.isPasswordError = true;
-                                this.passwordErrorMessage =
-                                    errorMessages[key][0];
+                                this.passwordErrorMessage = errorMessage[key][0];
                             }
                         });
-                    } else if (response.status == 401) {
-                        const errorMessage = response.data.error;
+                    } else {
                         this.isAuthError = true;
                         this.authErrorMessage = errorMessage;
                     }
                 });
         },
+        isObject(value){
+            return (
+                typeof value === 'object' && value !== null && !Array.isArray(value)
+            );
+        },
+        resetForm(){
+            this.isEmailError = false;
+            this.isPasswordError = false;
+            this.emailErrorMessage = "";
+            this.passwordErrorMessage = "";
+
+        }
     },
 };
 </script>

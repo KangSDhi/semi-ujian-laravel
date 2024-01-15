@@ -13,4 +13,11 @@ class TestController extends Controller
             "message" => "Ok Gan"
         ], 200);
     }
+
+    public function getAuth(){
+        return response()->json([
+            "code"  => 200,
+            "data"  => auth()->guard('jwt')->user()
+        ]);
+    }
 }

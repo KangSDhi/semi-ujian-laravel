@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\AdminResource;
 use App\Http\Resources\SiswaResource;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -21,9 +22,9 @@ class AuthController extends Controller
 
         if($validator->fails()){
             return response()->json([
-                'success'   => false,
-                'errors'    => $validator->errors()
-            ], 422);
+                'code'   => 400,
+                'error_message' => $validator->errors()
+            ], 400);
         }
 
         if(filter_var($request->emailOrNisn, FILTER_VALIDATE_EMAIL)){
@@ -40,9 +41,9 @@ class AuthController extends Controller
 
         if (!$token = auth()->guard('jwt')->setTTL(1440)->attempt($credentials)) {
             return response()->json([
-                'success' => false,
-                'error' => 'Email, NISN atau Password Salah!'
-            ], 401);
+                'code' => 400,
+                'error_message' => 'Email, NISN atau Password Salah!'
+            ], 400);
         }
 
 
@@ -55,9 +56,28 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'success'   => true,
-            'user'      => $data,
-            'token'     => $token
+            'code'   => 200,
+            'data'  => [
+                'user'      => $data,
+                'token'     => $token
+            ]
+        ], 200);
+    }
+
+    public function logout(){
+        auth()->guard('jwt')->logout();
+        return response()->json([
+            "code"  => 200,
+            "message"   => "Logout Berhasil"
+        ], 200);
+    }
+
+    public function check(){
+        $user = auth()->guard('jwt')->user();
+        $data["role_id"] = $user->role_id;
+        return response()->json([
+            "code"  => 200,
+            "data"  => $data
         ], 200);
     }
 }
