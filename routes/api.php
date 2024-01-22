@@ -6,6 +6,7 @@ use App\Http\Controllers\API\Test\TestController as Test;
 use App\Http\Controllers\API\Auth\AuthController as Auth;
 use App\Http\Controllers\API\Error\ErrorController as Error;
 use App\Http\Controllers\API\Siswa\SoalController as SoalSiswa;
+use App\Http\Controllers\API\Siswa\SiswaController as Siswa;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,5 +38,6 @@ Route::middleware(['auth:jwt', 'cekrole.siswa'])->prefix('siswa')->group(functio
 });
 
 Route::middleware(['auth:jwt', 'cekrole.admin'])->prefix('admin')->group(function(){
-
+    Route::get('/data-siswa', [Siswa::class, 'index']);
+    Route::get('/logout', [Auth::class, 'logout']);
 });

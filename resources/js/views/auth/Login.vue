@@ -122,7 +122,7 @@ export default {
                     console.log(data.data.user.role_id);
                     localStorage.setItem("auth_token", data.data.token);
                     if (data.data.user.role_id == 1) {
-                        
+                        this.$router.push({ name: "Dashboard Admin" });
                     } else if (data.data.user.role_id == 2){
                         this.$router.push({ name: "Dashboard Siswa" });
                     }
