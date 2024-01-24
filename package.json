@@ -17,6 +17,7 @@
     "dependencies": {
         "fuse.js": "^7.0.0",
         "vue": "^3.4.8",
-        "vue-router": "^4.2.5"
+        "vue-router": "^4.2.5",
+        "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.1/xlsx-0.20.1.tgz"
     }
 }

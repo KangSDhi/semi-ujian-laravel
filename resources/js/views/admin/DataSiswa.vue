@@ -1,6 +1,52 @@
 <template>
     <BaseLayout>
         <template #content>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="justify-self-center sm:justify-self-start">
+                    <select v-model="view" @change="changeView()"
+                        class="block w-60 p-2 mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <template v-for="(item, index) in listViewBinding()">
+                            <option :value="item">{{ item }}</option>
+                        </template>
+                    </select>
+                </div>
+                <div class="justify-self-center space-x-2">
+                    <button
+                        class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm me-2 rounded-lg inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        Tambah Siswa
+                    </button>
+                    <button @click="isFormUploadSiswa = true"
+                        class="px-5 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-sm me-2 rounded-lg inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z" />
+                        </svg>
+                        Upload Siswa
+                    </button>
+                </div>
+                <div class="justify-self-center mb-2 sm:justify-self-end">
+                    <label for="default-search"
+                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                            </svg>
+                        </div>
+                        <input v-model="searchInput" type="search" id="default-search"
+                            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Cari Nama, NISN ....">
+
+                    </div>
+                </div>
+            </div>
             <div class="relative overflow-x-auto">
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -9,13 +55,55 @@
                                 #
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                NISN
+                                <div class="flex items-center gap-2">
+                                    <span>NISN</span>
+                                    <div class="flex flex-col">
+                                        <svg @click="sort('nisn', 'asc')" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="4" viewBox="0 0 24 24"
+                                            stroke="currentColor" width="12px" height="12px" class="cursor-pointer">
+                                            <path d="M5 15l7-7 7 7"></path>
+                                        </svg>
+                                        <svg @click="sort('nisn', 'desc')" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="4" viewBox="0 0 24 24"
+                                            stroke="currentColor" width="12px" height="12px" class="cursor-pointer">
+                                            <path d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Nama Siswa
+                                <div class="flex items-center gap-2">
+                                    <span>Nama Siswa</span>
+                                    <div class="flex flex-col">
+                                        <svg @click="sort('nama_siswa', 'asc')" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="4" viewBox="0 0 24 24"
+                                            stroke="currentColor" width="12px" height="12px" class="cursor-pointer">
+                                            <path d="M5 15l7-7 7 7"></path>
+                                        </svg>
+                                        <svg @click="sort('nama_siswa', 'desc')" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="4" viewBox="0 0 24 24"
+                                            stroke="currentColor" width="12px" height="12px" class="cursor-pointer">
+                                            <path d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Jurusan
+                                <div class="flex items-center gap-2">
+                                    <span>Jurusan</span>
+                                    <div class="flex flex-col">
+                                        <svg @click="sort('nama_jurusan', 'asc')" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="4" viewBox="0 0 24 24"
+                                            stroke="currentColor" width="12px" height="12px" class="cursor-pointer">
+                                            <path d="M5 15l7-7 7 7"></path>
+                                        </svg>
+                                        <svg @click="sort('nama_jurusan', 'desc')" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" stroke-width="4" viewBox="0 0 24 24"
+                                            stroke="currentColor" width="12px" height="12px" class="cursor-pointer">
+                                            <path d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Password
@@ -53,40 +141,83 @@
                         </template>
                     </tbody>
                 </table>
-                <nav aria-label="Page navigation example">
-                    <ul class="flex items-center -space-x-px h-8 text-sm">
+            </div>
+            <nav aria-label="table navigation">
+                <ul class="flex items-center -space-x-px h-10 text-base">
+                    <li>
+                        <button @click.prevent="clickPage(1)"
+                            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-bl-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            Awal
+                        </button>
+                    </li>
+                    <li>
+                        <button @click.prevent="clickPage(pagination.currentPage - 1)"
+                            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Previous</span>
+                            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 1 1 5l4 4" />
+                            </svg>
+                        </button>
+                    </li>
+                    <template v-for="(item, index) in pagination.pages" :key="index">
                         <li>
-                            <a href="#"
-                                class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                <span class="sr-only">Previous</span>
-                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M5 1 1 5l4 4" />
-                                </svg>
-                            </a>
+                            <button @click="clickPage(item)"
+                                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white hover:cursor-pointer"
+                                :class="{ 'dark:bg-white dark:text-gray-800': pagination.currentPage === item }">
+                                {{ item }}
+                            </button>
                         </li>
-                        <template v-for="(item, index) in pagination.pages" :key="index">
-                            <li>
-                                <div
-                                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                    {{ item }}
-                                </div>
-                            </li>
-                        </template>
-                        <li>
-                            <a href="#"
-                                class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                <span class="sr-only">Next</span>
-                                <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="m1 9 4-4-4-4" />
+                    </template>
+                    <li>
+                        <button @click.prevent="clickPage(pagination.currentPage + 1)"
+                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Next</span>
+                            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 9 4-4-4-4" />
+                            </svg>
+                        </button>
+                    </li>
+                    <li>
+                        <button @click.prevent="clickPage(pagination.lastPage)"
+                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-br-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            Akhir
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+            <div v-show="isFormUploadSiswa" class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white px-16 py-14 rounded-md text-center">
+                    <h1 class="text-xl mb-4 font-bold text-slate-500">Upload Siswa</h1>
+                    <div class="grid grid-cols-1 justify-items-center gap-1">
+                        <input @change="fileUploadSiswa"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            type="file"
+                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                        <div class="flex w-full gap-2">
+                            <button @click="uploadSiswa"
+                                class="px-5 mt-5 py-2.5 w-1/2 bg-yellow-400 hover:bg-yellow-500 text-xs me-2 rounded-lg inline-flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z" />
                                 </svg>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                                Upload Siswa
+                            </button>
+                            <button @click="isFormUploadSiswa = false"
+                                class="px-5 text-xs mt-5 py-2.5 w-1/2 bg-gray-100 hover:bg-gray-200 me-2 rounded-lg inline-flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                    stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                                Batal
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </template>
     </BaseLayout>
@@ -96,6 +227,7 @@
 import BaseLayout from './BaseLayout.vue';
 import axios from 'axios';
 import Fuse from "fuse.js";
+import { read, utils, writeFile } from "xlsx";
 
 export default {
     data() {
@@ -119,14 +251,21 @@ export default {
             sorted: {
                 field: 'nama_jurusan',
                 rule: 'asc'
-            }
+            },
+            isFormUploadSiswa: false,
+            dataUploadSiswa: [],
         }
     },
     components: {
         BaseLayout
     },
     mounted() {
-        this.getSiswa()
+        this.getSiswa();
+    },
+    watch: {
+        searchInput: function (newVal, oldVal) {
+            this.search(newVal);
+        }
     },
     methods: {
         getSiswa() {
@@ -136,7 +275,6 @@ export default {
                 }
             })
                 .then(({ data }) => {
-                    console.log(data);
                     this.items = this.data = data.data;
                     this.pagination.lastPage = Math.ceil(data.data.length / this.view);
                     this.pagination.total = data.data.length;
@@ -150,7 +288,34 @@ export default {
         checkView(index) {
             return index > this.pagination.to || index < this.pagination.from ? false : true;
         },
-        showPages(){
+        changeView() {
+            this.changePage(1);
+            this.showPages();
+        },
+        changePage(page) {
+            if (page >= 1 && page <= this.pagination.lastPage) {
+
+                this.showPages();
+
+                const total = this.items.length;
+                const lastPage = Math.ceil(total / this.view) || 1;
+                const from = (page - 1) * this.view + 1;
+                let to = page * this.view;
+
+                if (page === lastPage) {
+                    to = total;
+                }
+
+                this.pagination.total = total;
+                this.pagination.lastPage = lastPage;
+                this.pagination.perPage = this.view;
+                this.pagination.currentPage = page;
+                this.pagination.from = from;
+                this.pagination.to = to;
+
+            }
+        },
+        showPages() {
             const pages = [];
             let from = this.pagination.currentPage - Math.ceil(this.pagination.offset / 2);
 
@@ -164,12 +329,119 @@ export default {
                 to = this.pagination.lastPage;
             }
 
-            while(from <= to){
+            while (from <= to) {
                 pages.push(from);
                 from++;
             }
 
             this.pagination.pages = pages;
+        },
+        clickPage(page) {
+            this.changePage(page);
+            this.showPages();
+        },
+        listViewBinding() {
+            const list = [];
+            for (let index = 0; index < this.listView.length; index++) {
+                if (this.listView[index] < this.items.length) {
+                    list.push(this.listView[index]);
+                }
+            }
+
+            const itemsLength = parseInt(JSON.stringify(this.items.length));
+
+            list.push(itemsLength);
+
+            return list;
+        },
+        search(value) {
+            if (value.length >= 1) {
+                const options = {
+                    shouldSort: true,
+                    keys: ['nama_siswa', 'nisn'],
+                    threshold: 0
+                };
+                const fuse = new Fuse(this.data, options);
+                this.items = fuse.search(value).map(elem => elem.item);
+            } else {
+                this.items = this.data;
+            }
+        },
+        sort(field, rule) {
+            this.items = this.items.sort(this.compareOnKey(field, rule));
+            this.sorted.field = field;
+            this.sorted.rule = rule;
+        },
+        compareOnKey(key, rule) {
+            return function (a, b) {
+                if (key === "nisn" || key == "nama_siswa" || key == "nama_jurusan") {
+                    let comparison = 0;
+                    const fieldA = a[key].toUpperCase();
+                    const fieldB = b[key].toUpperCase();
+                    if (rule === 'asc') {
+                        if (fieldA > fieldB) {
+                            comparison = 1;
+                        } else if (fieldA < fieldB) {
+                            comparison = -1;
+                        }
+                    } else {
+                        if (fieldA < fieldB) {
+                            comparison = 1;
+                        } else if (fieldA > fieldB) {
+                            comparison = -1
+                        }
+                    }
+                    return comparison;
+                }
+            }
+        },
+        fileUploadSiswa(event) {
+            const file = event.target.files[0];
+            let datas = []
+            this.readExcelFile(file)
+                .then((data) => {
+                    this.dataUploadSiswa = data;
+                    console.log(this.dataUploadSiswa);
+                })
+                .catch((error) => {
+                    console.log("Error reading Excel file:", error);
+                });
+        },
+        readExcelFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsArrayBuffer(file);
+
+                reader.onload = function (e) {
+                    const binarystr = new Uint8Array(e.target.result);
+                    const wb = read(binarystr, { type: 'array', raw: true, cellFormula: false });
+
+                    const wsname = wb.SheetNames[0];
+                    const data = utils.sheet_to_json(wb.Sheets[wsname]);
+
+                    resolve(data);
+                };
+
+                reader.onerror = function (error) {
+                    reject(error);
+                }
+            });
+        },
+        uploadSiswa() {
+            console.log(this.dataUploadSiswa);
+            axios.post("/api/admin/create-siswa-batch", {
+                data: this.dataUploadSiswa
+            }, {
+                headers: {
+                    "Authorization": "Bearer " + this.token
+                }
+            })
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
         }
     }
 }

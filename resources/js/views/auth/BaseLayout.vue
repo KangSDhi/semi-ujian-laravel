@@ -29,6 +29,10 @@ export default {
                 }
             })
             .then(({ data }) => {
+                if (data.data.role_id == 1) {
+                    this.$router.push({ name: "Dashboard Admin" });
+                }
+                
                 if (data.data.role_id == 2) {
                     this.$router.push({ name: "Dashboard Siswa" });
                 }

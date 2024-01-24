@@ -39,5 +39,6 @@ Route::middleware(['auth:jwt', 'cekrole.siswa'])->prefix('siswa')->group(functio
 
 Route::middleware(['auth:jwt', 'cekrole.admin'])->prefix('admin')->group(function(){
     Route::get('/data-siswa', [Siswa::class, 'index']);
+    Route::post('/create-siswa-batch', [Siswa::class, 'batchCreate']);
     Route::get('/logout', [Auth::class, 'logout']);
 });
