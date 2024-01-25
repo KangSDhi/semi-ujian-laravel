@@ -109,11 +109,16 @@
                                 Password
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                <span class="sr-only">Aksi</span>
+                                <span class="">Aksi</span>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
+                        <template v-if="items.length == 0">
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th class="text-xl" colspan="6">Data Kosong</th>
+                            </tr>
+                        </template>
                         <template v-for="(item, index) in items" :key="index">
                             <tr v-show="checkView(index + 1)"
                                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -133,9 +138,10 @@
                                 <td class="px-6 py-4">
                                     {{ item.password_dec }}
                                 </td>
-                                <td class="px-6 py-4 text-right">
-                                    <a href="#"
-                                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Aksi</a>
+                                <td class="px-6 py-4 space-x-4 text-right">
+                                    <button @click="showUpdateDialog(item.id)"
+                                        class="bg-blue-200 px-2.5 py-1 text-gray-900 rounded-md">Edit</button>
+                                    <button @click="showDeleteDialog(item.id)" class="text-red-500 mt-2">Hapus</button>
                                 </td>
                             </tr>
                         </template>
@@ -189,7 +195,8 @@
                     </li>
                 </ul>
             </nav>
-            <div v-show="isFormUploadSiswa" class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+            <div v-show="isFormUploadSiswa"
+                class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
                 <div class="bg-white px-16 py-14 rounded-md text-center">
                     <h1 class="text-xl mb-4 font-bold text-slate-500">Upload Siswa</h1>
                     <div class="grid grid-cols-1 justify-items-center gap-1">
@@ -216,6 +223,112 @@
                                 Batal
                             </button>
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div v-show="isLoading"
+                class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white px-16 py-14 rounded-md text-center">
+                    <h1 class="text-xl mb-4 font-bold text-slate-500">Sabar Nggih....</h1>
+                    <div class="flex justify-center">
+                        <svg aria-hidden="true" class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                            viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                fill="currentColor" />
+                            <path
+                                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                fill="currentFill" />
+                        </svg>
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+            <div v-show="isDeleteDialog"
+                class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white px-16 py-14 rounded-md text-center">
+                    <h1 class="text-xl mb-2 font-bold text-slate-500">Apakah Anda Ingin Menghapus?</h1>
+                    <h2 class="text-md mb-2 font-semibold text-slate-400">{{ dataDelete.nama_siswa }}</h2>
+                    <div class="grid grid-cols-2 gap-1">
+                        <button @click="deleteSiswa"
+                            class="bg-red-500 px-4 py-2 rounded-md text-md font-semibold text-white">Hapus</button>
+                        <button @click="isDeleteDialog = false"
+                            class="bg-gray-500 px-4 py-2 rounded-md text-md font-semibold text-white ml-1">Batal</button>
+                    </div>
+                </div>
+            </div>
+            <div v-show="isUpdateDialog"
+                class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white px-16 py-14 rounded-md">
+                    <h1 class="text-xl mb-4 font-bold text-slate-500">Edit</h1>
+                    <div class="grid md:grid-cols-2 gap-1">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Nama Siswa</label>
+                            <input v-model="dataUpdate.nama_siswa" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': updateError.namaSiswaErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.namaSiswaErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">NISN</label>
+                            <input v-model="dataUpdate.nisn" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': updateError.nisnErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.nisnErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Password</label>
+                            <input v-model="dataUpdate.password_dec" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': updateError.passwordErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.passwordErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Password
+                                Konfirmasi</label>
+                            <input v-model="dataUpdate.password_konfirmasi" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': updateError.passwordKonfirmasiErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.passwordKonfirmasiErrorMessage
+                            }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Jurusan</label>
+                            <select v-model="dataUpdate.nama_jurusan"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': updateError.jurusanErrorMessage }">
+                                <template v-for="(item, index) in dataJurusan" :key="index">
+                                    <option :value="item.nama" :selected="item.nama === dataUpdate.nama_jurusan">{{
+                                        item.nama }}</option>
+                                </template>
+                            </select>
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.jurusanErrorMessage }}</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button @click="updateSiswa"
+                            class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
+                            Simpan
+                        </button>
+                        <button @click="isUpdateDialog = false"
+                            class="px-5 py-2.5 bg-gray-400 hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                            Batal
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div v-show="uploadError.length != 0"
+                class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white px-16 py-14 rounded-md">
+                    <h1 class="text-2xl mb-4 font-bold text-red-500">Error!</h1>
+                    <div class="flex flex-col">
+                        <template v-for="(item, index) in uploadError">
+                            <span class="text-red-500 text-xl font-semibold">{{ '* '+item }}</span>
+                        </template>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button @click="uploadError = []" class="bg-gray-400 px-3 py-2 rounded-lg text-md">Tutup</button>
                     </div>
                 </div>
             </div>
@@ -252,14 +365,29 @@ export default {
                 field: 'nama_jurusan',
                 rule: 'asc'
             },
+            isLoading: false,
             isFormUploadSiswa: false,
+            uploadError: [],
             dataUploadSiswa: [],
+            dataDelete: [],
+            isDeleteDialog: false,
+            dataUpdate: [],
+            isUpdateDialog: false,
+            updateError: {
+                namaSiswaErrorMessage: '',
+                nisnErrorMessage: '',
+                passwordErrorMessage: '',
+                passwordKonfirmasiErrorMessage: '',
+                jurusanErrorMessage: ''
+            },
+            dataJurusan: [],
         }
     },
     components: {
         BaseLayout
     },
     mounted() {
+        this.getJurusan();
         this.getSiswa();
     },
     watch: {
@@ -268,8 +396,21 @@ export default {
         }
     },
     methods: {
+        getJurusan() {
+            axios.get("/api/admin/jurusan", {
+                headers: {
+                    "Authorization": "Bearer " + this.token
+                }
+            })
+                .then(({ data }) => {
+                    this.dataJurusan = data.data;
+                })
+                .catch(({ response }) => {
+                    console.error(response);
+                });
+        },
         getSiswa() {
-            axios.get("/api/admin/data-siswa", {
+            axios.get("/api/admin/siswa", {
                 headers: {
                     "Authorization": "Bearer " + this.token
                 }
@@ -428,20 +569,115 @@ export default {
             });
         },
         uploadSiswa() {
-            console.log(this.dataUploadSiswa);
-            axios.post("/api/admin/create-siswa-batch", {
-                data: this.dataUploadSiswa
-            }, {
+            this.isFormUploadSiswa = false;
+
+            const fetchData = async () => {
+                const promise = axios.post("/api/admin/siswa/create/batch", {
+                    data: this.dataUploadSiswa
+                }, {
+                    headers: {
+                        "Authorization": "Bearer " + this.token
+                    }
+                });
+
+                this.isLoading = true;
+
+                try {
+                    const response = await promise;
+                    this.isLoading = false
+                    this.$router.go();
+                    console.log(response.data);
+                } catch ({ response }) {
+                    this.isLoading = false;
+                    console.log(this.uploadError.length);
+                    // console.error(response.data.error_message);
+                    const errorMessage = response.data.error_message;
+                    Object.keys(errorMessage).forEach((key) => {
+                        this.uploadError.push(errorMessage[key][0]);
+                    });
+                    console.log(this.uploadError.length);
+                }
+            };
+
+            fetchData();
+        },
+        showDeleteDialog(id) {
+            const data = JSON.parse(JSON.stringify(this.data));
+            const index = data.findIndex((item) => item.id === id);
+            this.dataDelete = data[index];
+            this.isDeleteDialog = true;
+        },
+        deleteSiswa() {
+            axios.get("/api/admin/siswa/delete/" + this.dataDelete.id, {
                 headers: {
                     "Authorization": "Bearer " + this.token
                 }
             })
                 .then((data) => {
                     console.log(data);
+                    this.$router.go();
                 })
                 .catch((error) => {
                     console.error(error);
                 });
+        },
+        showUpdateDialog(id) {
+            const data = JSON.parse(JSON.stringify(this.data));
+            const index = data.findIndex((item) => item.id === id);
+            this.dataUpdate = data[index];
+            this.isUpdateDialog = true;
+        },
+        updateSiswa() {
+            axios.put("/api/admin/siswa/update", {
+                id: this.dataUpdate.id,
+                nisn: this.dataUpdate.nisn,
+                nama_siswa: this.dataUpdate.nama_siswa,
+                nama_jurusan: this.dataUpdate.nama_jurusan,
+                password: this.dataUpdate.password_dec,
+                konfirmasi_password: this.dataUpdate.password_konfirmasi,
+                _method: "put"
+            }, {
+                headers: {
+                    "Authorization": "Bearer " + this.token
+                }
+            })
+                .then(({ data }) => {
+                    console.log(data);
+                    this.$router.go();
+                })
+                .catch(({ response }) => {
+                    this.updateError.nisnErrorMessage = '';
+                    this.updateError.namaSiswaErrorMessage = '';
+                    this.updateError.jurusanErrorMessage = '';
+                    this.updateError.passwordErrorMessage = '';
+                    this.updateError.passwordKonfirmasiErrorMessage = '';
+                    const errorMessage = response.data.error_message;
+                    if (this.isObject(errorMessage)) {
+                        Object.keys(errorMessage).forEach((key) => {
+                            if (key == "nisn") {
+                                this.updateError.nisnErrorMessage = errorMessage[key][0];
+                            }
+                            if (key == "nama_siswa") {
+                                this.updateError.namaSiswaErrorMessage = errorMessage[key][0];
+                            }
+                            if (key == "nama_jurusan") {
+                                this.updateError.jurusanErrorMessage = errorMessage[key][0];
+                            }
+                            if (key == "password") {
+                                this.updateError.passwordErrorMessage = errorMessage[key][0];
+                            }
+                            if (key == "konfirmasi_password") {
+                                this.updateError.passwordKonfirmasiErrorMessage = errorMessage[key][0];
+                            }
+                        });
+                    }
+
+                });
+        },
+        isObject(value) {
+            return (
+                typeof value === 'object' && value !== null && !Array.isArray(value)
+            );
         }
     }
 }

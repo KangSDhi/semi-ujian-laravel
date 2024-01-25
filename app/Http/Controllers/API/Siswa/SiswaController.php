@@ -19,6 +19,8 @@ class SiswaController extends Controller
             jurusan.nama as nama_jurusan,
             users.password_dec'))
             ->where('role_id', 2)
+            ->orderBy('jurusan.nama', 'asc')
+            ->orderBy('users.name', 'asc')
             ->get();
         
         return response()->json([
@@ -57,14 +59,6 @@ class SiswaController extends Controller
 
         $dataStore = [];
 
-        // $data[0]['password'] = "ssss";
-
-        // dd($data[0]);
-
-        // foreach($data as $key => $item){
-
-        // }
-
         foreach ($dataRequest as $key => $value) {
             $pass = $this->generatePassword();
 
@@ -96,6 +90,65 @@ class SiswaController extends Controller
         }
 
     }
+
+    public function update(Request $request){
+
+        $rules = [
+            "id"    => "required",
+            "nisn"  => "required",
+            "nama_siswa"    => "required",
+            "nama_jurusan"  => "required",
+            "password"  => "required",
+        ];
+
+        $messages = [
+            "nisn.required" => "Mohon Isi NISN!",
+            "nama_siswa.required" => "Mohon Isi Nama Siswa!",
+            "nama_jurusan.required" => "Mohon Isi Nama Jurusan!",
+            "password.required" => "Mohon Isi Password!",
+            "konfirmasi_password.same" => "Konfirmasi Password Tidak Sama Dengan Password!",
+        ];
+
+        if ($request->konfirmasi_password != null) {
+            $rules['konfirmasi_password'] = "same:password";
+        }
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "code" => 400,
+                "error_message" => $validator->errors()
+            ], 400);
+        }
+
+        $jurusan = Jurusan::where('nama', $request->nama_jurusan)->first();
+
+        $siswa = User::find($request->id);
+
+        $siswa->name = $request->nama_siswa;
+        $siswa->NISN = $request->nisn;
+        $siswa->jurusan_id = $jurusan->id;
+        $siswa->password = bcrypt($request->password);
+        $siswa->password_dec = $request->password;
+        $siswa->save();
+
+        return response()->json([
+            "code"  => 201,
+            "message"   => "Berhasil Mengubah Data"
+        ], 201);
+    }
+
+    public function destroy($id){
+        User::where('id', $id)->delete();
+
+        return response()->json([
+            "code"  => 200,
+            "message"   => "Berhasil Menghapus Siswa"
+        ], 200);
+    }
+
+
 
     public function generatePassword($length = 10){
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
