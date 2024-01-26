@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\API\Siswa;
+namespace App\Http\Controllers\API\Soal;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class SoalController extends Controller
 {
-    public function soal(){
+    public function getSoalByUser(){
         $getUser = auth('jwt')->user();
         $getToday = date("Y-m-d");
 
@@ -27,5 +27,9 @@ class SoalController extends Controller
             "code"  => 200,
             "data"  => $getSoal
         ], 200);
+    }
+
+    public function getSoalJoinJurusan(){
+        
     }
 }

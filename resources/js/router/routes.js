@@ -2,6 +2,7 @@ import LoginPage from "../views/auth/Login.vue";
 import DashboardSiswaPage from "../views/siswa/Dashboard.vue";
 import DashboardAdminPage from "../views/admin/Dashboard.vue";
 import DataSiswaAdminPage from "../views/admin/DataSiswa.vue";
+import DataSoalAdminPage from "../views/admin/DataSoal.vue";
 
 const routes = [
     {
@@ -29,6 +30,14 @@ const routes = [
                 component: DataSiswaAdminPage,
                 meta: {
                     title: "Data Siswa"
+                }
+            },
+            {
+                path: "data-soal",
+                name: "Data Soal Admin",
+                component: DataSoalAdminPage,
+                meta: {
+                    title: "Data Soal"
                 }
             }
         ]

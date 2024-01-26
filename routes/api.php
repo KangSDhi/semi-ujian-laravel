@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Test\TestController as Test;
 use App\Http\Controllers\API\Auth\AuthController as Auth;
 use App\Http\Controllers\API\Error\ErrorController as Error;
-use App\Http\Controllers\API\Siswa\SoalController as SoalSiswa;
+use App\Http\Controllers\API\Soal\SoalController as Soal;
 use App\Http\Controllers\API\Siswa\SiswaController as Siswa;
 use App\Http\Controllers\API\Jurusan\JurusanController as Jurusan;
 
@@ -34,7 +34,7 @@ Route::middleware(['auth:jwt'])->prefix('check')->group(function(){
 });
 
 Route::middleware(['auth:jwt', 'cekrole.siswa'])->prefix('siswa')->group(function(){
-    Route::get('/data-soal', [SoalSiswa::class, 'soal']);
+    Route::get('/soal/user', [Soal::class, 'getSoalByUser']);
     Route::get('/logout', [Auth::class, 'logout']);
 });
 

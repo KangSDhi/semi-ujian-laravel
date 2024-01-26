@@ -54,7 +54,7 @@ export default {
     },
     methods: {
         getSoal() {
-            axios.get("/api/siswa/data-soal", {
+            axios.get("/api/siswa/soal/user", {
                 headers: {
                     "Authorization": "Bearer " + this.token
                 }
