@@ -40,6 +40,7 @@ Route::middleware(['auth:jwt', 'cekrole.siswa'])->prefix('siswa')->group(functio
 
 Route::middleware(['auth:jwt', 'cekrole.admin'])->prefix('admin')->group(function(){
     Route::get('/siswa', [Siswa::class, 'index']);
+    Route::post('/siswa/create', [Siswa::class, 'create']);
     Route::post('/siswa/create/batch', [Siswa::class, 'batchCreate']);
     Route::put('/siswa/update', [Siswa::class, 'update']);
     Route::get('/siswa/delete/{id}', [Siswa::class, 'destroy']);

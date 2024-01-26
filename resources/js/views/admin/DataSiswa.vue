@@ -11,7 +11,7 @@
                     </select>
                 </div>
                 <div class="justify-self-center space-x-2">
-                    <button
+                    <button @click="isFormCreateSiswa = true"
                         class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm me-2 rounded-lg inline-flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
@@ -115,8 +115,9 @@
                     </thead>
                     <tbody>
                         <template v-if="items.length == 0">
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <th class="text-xl" colspan="6">Data Kosong</th>
+                            <tr
+                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th class="text-xl text-center py-2.5" colspan="6">Data Kosong</th>
                             </tr>
                         </template>
                         <template v-for="(item, index) in items" :key="index">
@@ -317,18 +318,78 @@
                     </div>
                 </div>
             </div>
-
             <div v-show="uploadError.length != 0"
                 class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
                 <div class="bg-white px-16 py-14 rounded-md">
                     <h1 class="text-2xl mb-4 font-bold text-red-500">Error!</h1>
                     <div class="flex flex-col">
                         <template v-for="(item, index) in uploadError">
-                            <span class="text-red-500 text-xl font-semibold">{{ '* '+item }}</span>
+                            <span class="text-red-500 text-xl font-semibold">{{ '* ' + item }}</span>
                         </template>
                     </div>
                     <div class="flex justify-end mt-4">
-                        <button @click="uploadError = []" class="bg-gray-400 px-3 py-2 rounded-lg text-md">Tutup</button>
+                        <button @click="uploadError = []; this.$router.go()"
+                            class="bg-gray-400 px-3 py-2 rounded-lg text-md">Tutup</button>
+                    </div>
+                </div>
+            </div>
+            <div v-show="isFormCreateSiswa"
+                class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white px-16 py-14 rounded-md">
+                    <h1 class="text-xl mb-4 font-bold text-slate-500">Buat Siswa</h1>
+                    <div class="grid md:grid-cols-2 gap-1">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Nama Siswa</label>
+                            <input v-model="dataCreate.nama_siswa" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': createError.namaSiswaErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ createError.namaSiswaErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">NISN</label>
+                            <input v-model="dataCreate.nisn" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': createError.nisnErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ createError.nisnErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Password</label>
+                            <input v-model="dataCreate.password" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': createError.passwordErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ createError.passwordErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Password
+                                Konfirmasi</label>
+                            <input v-model="dataCreate.password_konfirmasi" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': createError.passwordKonfirmasiErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ createError.passwordKonfirmasiErrorMessage
+                            }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Jurusan</label>
+                            <select v-model="dataCreate.nama_jurusan"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': createError.jurusanErrorMessage }">
+                                <template v-for="(item, index) in dataJurusan" :key="index">
+                                    <option :value="item.nama">{{
+                                        item.nama }}</option>
+                                </template>
+                            </select>
+                            <span class="text-red-500 text-sm font-bold">{{ createError.jurusanErrorMessage }}</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-end gap-2">
+                        <button @click="createSiswa"
+                            class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
+                            Simpan
+                        </button>
+                        <button @click="isFormCreateSiswa = false"
+                            class="px-5 py-2.5 bg-gray-400 hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                            Batal
+                        </button>
                     </div>
                 </div>
             </div>
@@ -340,7 +401,7 @@
 import BaseLayout from './BaseLayout.vue';
 import axios from 'axios';
 import Fuse from "fuse.js";
-import { read, utils, writeFile } from "xlsx";
+import { read, utils } from "xlsx";
 
 export default {
     data() {
@@ -367,7 +428,22 @@ export default {
             },
             isLoading: false,
             isFormUploadSiswa: false,
+            dataCreate: {
+                nama_siswa: '',
+                nisn: '',
+                password: '',
+                password_konfirmasi: '',
+                nama_jurusan: '',
+            },
+            createError: {
+                namaSiswaErrorMessage: '',
+                nisnErrorMessage: '',
+                passwordErrorMessage: '',
+                passwordKonfirmasiErrorMessage: '',
+                jurusanErrorMessage: ''
+            },
             uploadError: [],
+            isFormCreateSiswa: false,
             dataUploadSiswa: [],
             dataDelete: [],
             isDeleteDialog: false,
@@ -381,6 +457,7 @@ export default {
                 jurusanErrorMessage: ''
             },
             dataJurusan: [],
+
         }
     },
     components: {
@@ -589,13 +666,10 @@ export default {
                     console.log(response.data);
                 } catch ({ response }) {
                     this.isLoading = false;
-                    console.log(this.uploadError.length);
-                    // console.error(response.data.error_message);
                     const errorMessage = response.data.error_message;
                     Object.keys(errorMessage).forEach((key) => {
                         this.uploadError.push(errorMessage[key][0]);
                     });
-                    console.log(this.uploadError.length);
                 }
             };
 
@@ -678,6 +752,51 @@ export default {
             return (
                 typeof value === 'object' && value !== null && !Array.isArray(value)
             );
+        },
+        createSiswa() {
+            axios.post("/api/admin/siswa/create", {
+                nama_siswa: this.dataCreate.nama_siswa,
+                nisn: this.dataCreate.nisn,
+                password: this.dataCreate.password,
+                password_konfirmasi: this.dataCreate.password_konfirmasi,
+                nama_jurusan: this.dataCreate.nama_jurusan
+            }, {
+                headers: {
+                    "Authorization": "Bearer " + this.token
+                }
+            })
+                .then(({ data }) => {
+                    console.log(data);
+                    this.$router.go();
+                })
+                .catch(({ response }) => {
+                    this.createError.nisnErrorMessage = '';
+                    this.createError.namaSiswaErrorMessage = '';
+                    this.createError.jurusanErrorMessage = '';
+                    this.createError.passwordErrorMessage = '';
+                    this.createError.passwordKonfirmasiErrorMessage = '';
+                    console.error(response);
+                    const errorMessages = response.data.error_message;
+                    if (this.isObject(errorMessages)) {
+                        Object.keys(errorMessages).forEach((key) => {
+                            if (key == "nama_siswa") {
+                                this.createError.namaSiswaErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "nisn") {
+                                this.createError.nisnErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "password") {
+                                this.createError.passwordErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "password_konfirmasi") {
+                                this.createError.passwordKonfirmasiErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "nama_jurusan") {
+                                this.createError.jurusanErrorMessage = errorMessages[key][0];
+                            }
+                        })
+                    }
+                });
         }
     }
 }

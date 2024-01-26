@@ -29,6 +29,41 @@ class SiswaController extends Controller
         ], 200);
     }
 
+    public function create(Request $request){
+        $rules = [
+            "nama_siswa"    => "required",
+            "nisn"          => "required|unique:users,NISN",
+            "password"      => "required",
+            "password_konfirmasi"   => "required|same:password",
+            "nama_jurusan"  => "required"
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                "code" => 400,
+                "error_message" => $validator->errors()
+            ], 400);
+        }
+
+        $jurusan = Jurusan::where("nama", $request->nama_jurusan)->first();
+
+        $siswa = new User();
+        $siswa->name = $request->nama_siswa;
+        $siswa->NISN = $request->nisn;
+        $siswa->password = bcrypt($request->password);
+        $siswa->password_dec = $request->password;
+        $siswa->jurusan_id = $jurusan->id;
+        $siswa->role_id = 2;
+        $siswa->save();
+
+        return response()->json([
+            "code"  => 201,
+            "message"   => "Berhasil Membuat Siswa Baru"
+        ], 201);
+    }
+
     public function batchCreate(Request $request){
         // dd($request->data);
         $rules = [
