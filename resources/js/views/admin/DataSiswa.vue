@@ -28,6 +28,9 @@
                         </svg>
                         Upload Siswa
                     </button>
+                    <button @click="exportXLSX">
+                        Export Excel
+                    </button>
                 </div>
                 <div class="justify-self-center mb-2 sm:justify-self-end">
                     <label for="default-search"
@@ -401,7 +404,7 @@
 import BaseLayout from './BaseLayout.vue';
 import axios from 'axios';
 import Fuse from "fuse.js";
-import { read, utils } from "xlsx";
+import { read, utils, writeFileXLSX } from "xlsx";
 
 export default {
     data() {
@@ -797,6 +800,12 @@ export default {
                         })
                     }
                 });
+        },
+        exportXLSX(){
+            const ws = utils.json_to_sheet(this.data);
+            const wb = utils.book_new();
+            utils.book_append_sheet(wb, ws, "Data");
+            writeFileXLSX(wb, "DataSiswa.xlsx");
         }
     }
 }

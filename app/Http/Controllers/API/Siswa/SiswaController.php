@@ -65,7 +65,6 @@ class SiswaController extends Controller
     }
 
     public function batchCreate(Request $request){
-        // dd($request->data);
         $rules = [
             "data.*.nama_siswa" => "required",
             "data.*.nisn"   => "required",
