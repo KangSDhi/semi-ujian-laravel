@@ -31,29 +31,29 @@ services:
     networks:
       - manajemen-ujian-laravel-net
   
-  db:
-    image: mariadb:10.7.8
-    container_name: manajemen-ujian-laravel-db
+  # db:
+  #   image: mariadb:10.7.8
+  #   container_name: manajemen-ujian-laravel-db
 
-    ports:
-      - 3001:3306
+  #   ports:
+  #     - 3001:3306
     
-    environment:
-      MARIADB_ROOT_PASSWORD: 'toor'
-      MARIADB_DATABASE: ${DB_DATABASE}
-      MARIADB_USER: ${DB_USERNAME}
-      MARIADB_PASSWORD: ${DB_PASSWORD}
+  #   environment:
+  #     MARIADB_ROOT_PASSWORD: 'toor'
+  #     MARIADB_DATABASE: ${DB_DATABASE}
+  #     MARIADB_USER: ${DB_USERNAME}
+  #     MARIADB_PASSWORD: ${DB_PASSWORD}
     
-    volumes:
-      - manajemen-ujian-laravel-data:/var/lib/mysql
+  #   volumes:
+  #     - manajemen-ujian-laravel-data:/var/lib/mysql
     
-    networks:
-      - manajemen-ujian-laravel-net
+  #   networks:
+  #     - manajemen-ujian-laravel-net
     
 
-volumes:
-  manajemen-ujian-laravel-data:
-    driver: local
+# volumes:
+#   manajemen-ujian-laravel-data:
+#     driver: local
 
 
 networks:
