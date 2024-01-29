@@ -1,0 +1,558 @@
+<template>
+    <BaseLayout>
+        <template #content>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="justify-self-center sm:justify-self-start">
+                    <select v-model="view" @change="changeView()"
+                        class="block w-60 p-2 mb-2 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <template v-for="(item, index) in listViewBinding()">
+                            <option :value="item">{{ item }}</option>
+                        </template>
+                    </select>
+                </div>
+                <div class="justify-self-center space-x-2">
+                    <button @click="isCreateForm = true"
+                        class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm me-2 rounded-lg inline-flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        Tambah Soal
+                    </button>
+                </div>
+                <div class="justify-self-center mb-2 sm:justify-self-end">
+                    <label for="default-search"
+                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                            </svg>
+                        </div>
+                        <input v-model="searchInput" type="search"
+                            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Cari ">
+                    </div>
+                </div>
+            </div>
+            <div class="relative overflow-x-auto">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">
+                                #
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Nama Soal
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Jurusan
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Waktu Mulai
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Aksi
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template v-if="items.length == 0">
+                            <tr
+                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th class="text-xl text-center py-2.5" colspan="5">Data Kosong</th>
+                            </tr>
+                        </template>
+                        <template v-for="(item, index) in items" :key="index">
+                            <tr v-show="checkView(index + 1)"
+                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    {{ index + 1 }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    {{ item.nama_soal }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <template v-if="item.nama_jurusan != null">
+                                        {{ item.nama_jurusan }}
+                                    </template>
+                                    <template v-else>
+                                        <span>Semua</span>
+                                    </template>
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ item.waktu_mulai }}
+                                </td>
+                                <td class="px-6 py-4 space-x-4 text-right">
+                                    <a :href="item.link" target="_blank">Link</a>
+                                    <button @click="showEditForm(item.id)">Edit</button>
+                                    <button @click="showDeleteDialog(item.id)">Hapus</button>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+            <nav aria-label="table navigation">
+                <ul class="flex items-center -space-x-px h-10 text-base">
+                    <li>
+                        <button @click.prevent="clickPage(1)"
+                            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-bl-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            Awal
+                        </button>
+                    </li>
+                    <li>
+                        <button @click.prevent="clickPage(pagination.currentPage - 1)"
+                            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Previous</span>
+                            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 1 1 5l4 4" />
+                            </svg>
+                        </button>
+                    </li>
+                    <template v-for="(item, index) in pagination.pages" :key="index">
+                        <li>
+                            <button @click="clickPage(item)"
+                                class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white hover:cursor-pointer"
+                                :class="{ 'dark:bg-white dark:text-gray-800': pagination.currentPage === item }">
+                                {{ item }}
+                            </button>
+                        </li>
+                    </template>
+                    <li>
+                        <button @click.prevent="clickPage(pagination.currentPage + 1)"
+                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Next</span>
+                            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 9 4-4-4-4" />
+                            </svg>
+                        </button>
+                    </li>
+                    <li>
+                        <button @click="clickPage(pagination.lastPage)"
+                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-br-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            Akhir
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+            <div v-show="isDeleteDialog"
+                class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white px-16 py-14 rounded-md text-center">
+                    <h1 class="text-xl mb-2 font-bold text-slate-500">Apakah Anda Ingin Menghapus?</h1>
+                    <h2 class="text-md mb-2 font-semibold text-slate-400">{{ dataDelete.nama_soal }}</h2>
+                    <div class="grid grid-cols-2 gap-1">
+                        <button @click="deleteSoal"
+                            class="bg-red-500 px-4 py-2 rounded-md text-md font-semibold text-white">Hapus</button>
+                        <button @click="isDeleteDialog = false"
+                            class="bg-gray-500 px-4 py-2 rounded-md text-md font-semibold text-white ml-1">Batal</button>
+                    </div>
+                </div>
+            </div>
+            <div v-show="isEditForm" class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white px-16 py-14 rounded-md">
+                    <h1 class="text-xl mb-4 font-bold text-slate-500">Edit Soal</h1>
+                    <div class="grid md:grid-cols-2 gap-1">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Nama Soal</label>
+                            <input v-model="dataUpdate.nama_soal" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': updateError.namaSoalErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.namaSoalErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Link</label>
+                            <input v-model="dataUpdate.link" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': updateError.linkErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.linkErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Jurusan</label>
+                            <select v-model="dataUpdate.nama_jurusan"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': updateError.jurusanErrorMessage }">
+                                <option :value="null" :selected="dataUpdate.nama_jurusan === null">Semua</option>
+                                <template v-for="(item, index) in dataJurusan" :key="index">
+                                    <option :value="item.nama" :selected="item.nama === dataUpdate.nama_jurusan">{{
+                                        item.nama }}</option>
+                                </template>
+                            </select>
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.jurusanErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Waktu Mulai</label>
+                            <input v-model="dataUpdate.waktu_mulai" type="datetime-local"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': updateError.waktuMulaiErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.waktuMulaiErrorMessage }}</span>
+                        </div>
+                    </div>
+                    <div class="flex mt-3 justify-end gap-2">
+                        <button @click="updateSoal"
+                            class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
+                            Simpan
+                        </button>
+                        <button @click="isEditForm = false"
+                            class="px-5 py-2.5 bg-gray-400 hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                            Batal
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div v-show="isCreateForm" class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white px-16 py-14 rounded-md">
+                    <h1 class="text-xl mb-4 font-bold text-slate-500">Edit Soal</h1>
+                    <div class="grid md:grid-cols-2 gap-1">
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Nama Soal</label>
+                            <input v-model="dataCreate.nama_soal" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': createError.namaSoalErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ createError.namaSoalErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Link</label>
+                            <input v-model="dataCreate.link" type="text"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': createError.linkErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ createError.linkErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Jurusan</label>
+                            <select v-model="dataCreate.nama_jurusan"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': createError.jurusanErrorMessage }">
+                                <option :value="null" selected>Semua</option>
+                                <template v-for="(item, index) in dataJurusan" :key="index">
+                                    <option :value="item.nama">{{
+                                        item.nama }}</option>
+                                </template>
+                            </select>
+                            <span class="text-red-500 text-sm font-bold">{{ createError.jurusanErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Waktu Mulai</label>
+                            <input v-model="dataCreate.waktu_mulai" type="datetime-local"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'dark:border-2 dark:border-red-500': createError.waktuMulaiErrorMessage }">
+                            <span class="text-red-500 text-sm font-bold">{{ createError.waktuMulaiErrorMessage }}</span>
+                        </div>
+                    </div>
+                    <div class="flex mt-3 justify-end gap-2">
+                        <button @click="createSoal"
+                            class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
+                            Simpan
+                        </button>
+                        <button @click="isCreateForm = false"
+                            class="px-5 py-2.5 bg-gray-400 hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                            Batal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </BaseLayout>
+</template>
+
+<script>
+import BaseLayout from './BaseLayout.vue';
+import axios from 'axios';
+import Fuse from 'fuse.js';
+
+export default {
+    data() {
+        return {
+            token: localStorage.getItem("auth_token"),
+            data: [],
+            items: [],
+            listView: [10, 25, 50, 100],
+            view: 10,
+            searchInput: '',
+            pagination: {
+                pages: [],
+                total: 0,
+                lastPage: 0,
+                perPage: 5,
+                currentPage: 1,
+                offset: 5,
+                from: 1,
+                to: 10
+            },
+            sorted: {
+                field: 'nama_jurusan',
+                rule: 'asc'
+            },
+            dataJurusan: [],
+            dataCreate: {
+                nama_soal: '',
+                link: '',
+                nama_jurusan: '',
+                waktu_mulai: '',
+            },
+            isCreateForm: false,
+            createError: {
+                namaSoalErrorMessage: '',
+                linkErrorMessage: '',
+                jurusanErrorMessage: '',
+                waktuMulaiErrorMessage: ''
+            },
+            isDeleteDialog: false,
+            dataDelete: [],
+            isEditForm: false,
+            dataUpdate: [],
+            updateError: {
+                namaSoalErrorMessage: '',
+                jurusanErrorMessage: '',
+                linkErrorMessage: '',
+                waktuMulaiErrorMessage: ''
+            }
+
+        }
+    },
+    components: {
+        BaseLayout
+    },
+    watch: {
+        searchInput: function (newVal, oldVal) {
+            this.search(newVal);
+        }
+    },
+    mounted() {
+        this.getSoal();
+        this.getJurusan();
+    },
+    methods: {
+        getJurusan() {
+            axios.get("/api/admin/jurusan", {
+                headers: {
+                    "Authorization": "Bearer " + this.token
+                }
+            })
+                .then(({ data }) => {
+                    this.dataJurusan = data.data;
+                })
+                .catch(({ response }) => {
+                    console.error(response);
+                });
+        },
+        getSoal() {
+            axios.get("/api/admin/soal", {
+                headers: {
+                    "Authorization": "Bearer " + this.token
+                }
+            })
+                .then(({ data }) => {
+                    this.items = this.data = data.data;
+                    this.pagination.lastPage = Math.ceil(data.data.length / this.view);
+                    this.pagination.total = data.data.length;
+
+                    this.showPages();
+
+                })
+                .catch(({ response }) => {
+                    console.error(response);
+                });
+        },
+        checkView(index) {
+            return index > this.pagination.to || index < this.pagination.from ? false : true;
+        },
+        changeView() {
+            this.changePage(1);
+            this.showPages();
+        },
+        changePage(page) {
+            if (page >= 1 && page <= this.pagination.lastPage) {
+
+                this.showPages();
+
+                const total = this.items.length;
+                const lastPage = Math.ceil(total / this.view) || 1;
+                const from = (page - 1) * this.view + 1;
+                let to = page * this.view;
+
+                if (page === lastPage) {
+                    to = total;
+                }
+
+                this.pagination.total = total;
+                this.pagination.lastPage = lastPage;
+                this.pagination.perPage = this.view;
+                this.pagination.currentPage = page;
+                this.pagination.from = from;
+                this.pagination.to = to;
+
+            }
+        },
+        showPages() {
+            const pages = [];
+            let from = this.pagination.currentPage - Math.ceil(this.pagination.offset / 2);
+
+            if (from < 1) {
+                from = 1;
+            }
+
+            let to = from + this.pagination.offset - 1;
+
+            if (to > this.pagination.lastPage) {
+                to = this.pagination.lastPage;
+            }
+
+            while (from <= to) {
+                pages.push(from);
+                from++;
+            }
+
+            this.pagination.pages = pages;
+        },
+        clickPage(page) {
+            this.changePage(page);
+            this.showPages();
+        },
+        listViewBinding() {
+            const list = [];
+            for (let index = 0; index < this.listView.length; index++) {
+                if (this.listView[index] < this.items.length) {
+                    list.push(this.listView[index]);
+                }
+            }
+
+            const itemsLength = parseInt(JSON.stringify(this.items.length));
+
+            list.push(itemsLength);
+
+            return list;
+        },
+        search(value) {
+            if (value.length >= 1) {
+                const options = {
+                    shouldSort: true,
+                    keys: ['nama_soal', 'nama_jurusan'],
+                    threshold: 0
+                };
+                const fuse = new Fuse(this.data, options);
+                this.items = fuse.search(value).map(elem => elem.item);
+            } else {
+                this.items = this.data;
+            }
+        },
+        showDeleteDialog(id) {
+            const data = JSON.parse(JSON.stringify(this.data));
+            const index = data.findIndex((item) => item.id === id);
+            this.dataDelete = data[index];
+            this.isDeleteDialog = true;
+        },
+        deleteSoal() {
+            axios.get("/api/admin/soal/delete/" + this.dataDelete.id, {
+                headers: {
+                    "Authorization": "Bearer " + this.token
+                }
+            })
+                .then((data) => {
+                    this.$router.go();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        },
+        createSoal(){
+            axios.post("/api/admin/soal/create", {
+                nama_soal: this.dataCreate.nama_soal,
+                link: this.dataCreate.link,
+                nama_jurusan: this.dataCreate.nama_jurusan,
+                waktu_mulai: this.dataCreate.waktu_mulai
+            }, {
+                headers: {
+                    "Authorization": "Bearer " + this.token
+                }
+            })
+            .then(({ data }) => {
+                this.$router.go();
+            })
+            .catch(({ response }) => {
+                this.createError.namaSoalErrorMessage = '';
+                this.createError.linkErrorMessage = '';
+                this.createError.jurusanErrorMessage = '';
+                this.createError.waktuMulaiErrorMessage = '';
+
+                const errorMessages = response.data.error_message;
+                if (this.isObject(errorMessages)) {
+                    Object.keys(errorMessages).forEach((key) => {
+                        if (key == "nama_soal") {
+                            this.createError.namaSoalErrorMessage = errorMessages[key][0];
+                        }
+                        if (key == "link") {
+                            this.createError.linkErrorMessage = errorMessages[key][0];
+                        }
+                        if (key == "nama_jurusan") {
+                            this.createError.jurusanErrorMessage = errorMessages[key][0];
+                        }
+                        if (key == "waktu_mulai") {
+                            this.createError.waktuMulaiErrorMessage = errorMessages[key][0];
+                        }
+                    })
+                }
+            });
+        },
+        showEditForm(id) {
+            const data = JSON.parse(JSON.stringify(this.data));
+            const index = data.findIndex((item) => item.id === id);
+            this.dataUpdate = data[index];
+            this.isEditForm = true;
+        },
+        updateSoal(){
+            axios.put("/api/admin/soal/update", {
+                id: this.dataUpdate.id,
+                nama_soal: this.dataUpdate.nama_soal,
+                link: this.dataUpdate.link,
+                nama_jurusan: this.dataUpdate.nama_jurusan,
+                waktu_mulai: this.dataUpdate.waktu_mulai
+            }, {
+                headers: {
+                    "Authorization": "Bearer " + this.token
+                }
+            })
+            .then(({ data }) => {
+                this.$router.go();
+            })
+            .catch(({ response }) => {
+                this.updateError.namaSoalErrorMessage = '';
+                this.updateError.linkErrorMessage = '';
+                this.updateError.jurusanErrorMessage = '';
+                this.updateError.waktuMulaiErrorMessage = '';
+
+                const errorMessages = response.data.error_message;
+                if (this.isObject(errorMessages)) {
+                    Object.keys(errorMessages).forEach((key) => {
+                        if (key == "nama_soal") {
+                            this.updateError.namaSoalErrorMessage = errorMessages[key][0];
+                        }
+                        if (key == "link") {
+                            this.updateError.linkErrorMessage = errorMessages[key][0];
+                        }
+                        if (key == "nama_jurusan") {
+                            this.updateError.jurusanErrorMessage = errorMessages[key][0];
+                        }
+                        if (key == "waktu_mulai") {
+                            this.updateError.waktuMulaiErrorMessage = errorMessages[key][0];
+                        }
+                    })
+                }
+            })
+        },
+        isObject(value) {
+            return (
+                typeof value === 'object' && value !== null && !Array.isArray(value)
+            );
+        },
+
+    }
+}
+</script>

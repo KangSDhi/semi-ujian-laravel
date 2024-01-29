@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('link');
             $table->unsignedBigInteger('jurusan_id')->nullable();
             $table->datetime('waktu_mulai');
-            $table->datetime('waktu_selesai');
             $table->timestamps();
 
             $table->foreign('jurusan_id')

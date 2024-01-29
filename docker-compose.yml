@@ -7,18 +7,19 @@ services:
       context: .
       dockerfile: Dockerfile
     
-    container_name: semi-ujian-laravel-app
+    container_name: manajemen-ujian-laravel-app
     working_dir: /var/www
 
     volumes:
       - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     
     networks:
-      - semi-ujian-laravel-net
+      - manajemen-ujian-laravel-net
 
   webserver:
-    image: nginx:alpine
-    container_name: semi-ujian-laravel-webserver
+    image: nginx:1.25.3
+    container_name: manajemen-ujian-laravel-webserver
 
     ports:
       - 8001:80
@@ -28,11 +29,11 @@ services:
       - ./docker/nginx/conf.d/nginx.conf:/etc/nginx/nginx.conf
 
     networks:
-      - semi-ujian-laravel-net
+      - manajemen-ujian-laravel-net
   
   db:
     image: mariadb:10.7.8
-    container_name: semi-ujian-laravel-db
+    container_name: manajemen-ujian-laravel-db
 
     ports:
       - 3001:3306
@@ -44,17 +45,17 @@ services:
       MARIADB_PASSWORD: ${DB_PASSWORD}
     
     volumes:
-      - semi-ujian-laravel-data:/var/lib/mysql
+      - manajemen-ujian-laravel-data:/var/lib/mysql
     
     networks:
-      - semi-ujian-laravel-net
+      - manajemen-ujian-laravel-net
     
 
 volumes:
-  semi-ujian-laravel-data:
+  manajemen-ujian-laravel-data:
     driver: local
 
 
 networks:
-  semi-ujian-laravel-net:
+  manajemen-ujian-laravel-net:
     driver: bridge

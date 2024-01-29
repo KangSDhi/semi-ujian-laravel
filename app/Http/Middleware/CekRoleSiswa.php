@@ -19,7 +19,7 @@ class CekRoleSiswa
         if ($user->role_id == 2) {
             return $next($request);
         } else {
-            return redirect()->route('get.accessdenied');
+            return redirect()->route('get.error.401');
         }
     }
 }
