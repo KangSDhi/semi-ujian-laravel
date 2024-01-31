@@ -10,9 +10,9 @@
                         </template>
                     </select>
                 </div>
-                <div class="justify-self-center space-x-2">
+                <div class="grid grid-cols-1 sm:grid-cols-3">
                     <button @click="isFormCreateSiswa = true"
-                        class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm me-2 rounded-lg inline-flex items-center">
+                        class="px-5 py-2 h-10 justify-self-center bg-blue-200 dark:bg-blue-400 hover:bg-blue-300 dark:hover:bg-blue-500 text-sm me-2 rounded-lg inline-flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -20,7 +20,7 @@
                         Tambah Siswa
                     </button>
                     <button @click="isFormUploadSiswa = true"
-                        class="px-5 py-2.5 bg-yellow-400 hover:bg-yellow-500 text-sm me-2 rounded-lg inline-flex items-center">
+                        class="px-5 py-2 h-10 justify-self-center bg-yellow-200 dark:bg-yellow-400 hover:bg-yellow-300 dark:hover:bg-yellow-500 text-sm me-2 rounded-lg inline-flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -28,7 +28,14 @@
                         </svg>
                         Upload Siswa
                     </button>
-                    <button @click="exportXLSX">
+                    <button
+                        class="px-5 py-2 h-10 justify-self-center bg-green-200 dark:bg-green-400 hover:bg-green-300 dark:hover:bg-green-500 text-sm me-2 rounded-lg inline-flex items-center"
+                        @click="exportXLSX">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
                         Export Excel
                     </button>
                 </div>
@@ -142,10 +149,25 @@
                                 <td class="px-6 py-4">
                                     {{ item.password_dec }}
                                 </td>
-                                <td class="px-6 py-4 space-x-4 text-right">
-                                    <button @click="showUpdateDialog(item.id)"
-                                        class="bg-blue-200 px-2.5 py-1 text-gray-900 rounded-md">Edit</button>
-                                    <button @click="showDeleteDialog(item.id)" class="text-red-500 mt-2">Hapus</button>
+                                <td class="px-6 py-4 space-x-2 text-right">
+                                    <button @click="showFormEditSiswa(item.id)"
+                                        class="bg-blue-200 px-2.5 py-1 text-gray-900 rounded-md inline-flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                        </svg>
+                                        Edit
+                                    </button>
+                                    <button @click="showDeleteDialog(item.id)"
+                                        class="px-2.5 py-1 text-red-500 rounded-md inline-flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        </svg>
+                                        Hapus
+                                    </button>
                                 </td>
                             </tr>
                         </template>
@@ -175,7 +197,7 @@
                         <li>
                             <button @click="clickPage(item)"
                                 class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white hover:cursor-pointer"
-                                :class="{ 'dark:bg-white dark:text-gray-800': pagination.currentPage === item }">
+                                :class="{ 'bg-black text-gray-50 dark:bg-white dark:text-gray-800': pagination.currentPage === item }">
                                 {{ item }}
                             </button>
                         </li>
@@ -261,46 +283,48 @@
                     </div>
                 </div>
             </div>
-            <div v-show="isUpdateDialog"
+            <div v-show="isFormEditSiswa"
                 class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
-                <div class="bg-white px-16 py-14 rounded-md">
-                    <h1 class="text-xl mb-4 font-bold text-slate-500">Edit</h1>
+                <div class="bg-white dark:bg-gray-900 px-16 py-14 rounded-md">
+                    <h1 class="text-xl mb-4 font-bold dark:text-slate-200 text-slate-500">Edit Siswa</h1>
                     <div class="grid md:grid-cols-2 gap-1">
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Nama Siswa</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Nama
+                                Siswa</label>
                             <input v-model="dataUpdate.nama_siswa" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': updateError.namaSiswaErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.namaSiswaErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ updateError.namaSiswaErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">NISN</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">NISN</label>
                             <input v-model="dataUpdate.nisn" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': updateError.nisnErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.nisnErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ updateError.nisnErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Password</label>
+                            <label
+                                class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Password</label>
                             <input v-model="dataUpdate.password_dec" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': updateError.passwordErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.passwordErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ updateError.passwordErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Password
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Password
                                 Konfirmasi</label>
                             <input v-model="dataUpdate.password_konfirmasi" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': updateError.passwordKonfirmasiErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.passwordKonfirmasiErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ updateError.passwordKonfirmasiErrorMessage
                             }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Jurusan</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Jurusan</label>
                             <select v-model="dataUpdate.nama_jurusan"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': updateError.jurusanErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.jurusanErrorMessage }">
                                 <template v-for="(item, index) in dataJurusan" :key="index">
                                     <option :value="item.nama" :selected="item.nama === dataUpdate.nama_jurusan">{{
                                         item.nama }}</option>
@@ -311,11 +335,20 @@
                     </div>
                     <div class="flex justify-end gap-2">
                         <button @click="updateSiswa"
-                            class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
-                            Simpan
+                            class="px-5 py-2.5 bg-blue-200 dark:bg-blue-400 hover:bg-blue-300 dark:hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                            Perbarui
                         </button>
-                        <button @click="isUpdateDialog = false"
-                            class="px-5 py-2.5 bg-gray-400 hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                        <button @click="isFormEditSiswa = false"
+                            class="px-5 py-2.5 bg-gray-200 dark:bg-gray-400 hover:bg-gray-300 dark:hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
                             Batal
                         </button>
                     </div>
@@ -338,44 +371,46 @@
             </div>
             <div v-show="isFormCreateSiswa"
                 class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
-                <div class="bg-white px-16 py-14 rounded-md">
-                    <h1 class="text-xl mb-4 font-bold text-slate-500">Buat Siswa</h1>
+                <div class="bg-white dark:bg-gray-900 px-16 py-14 rounded-md">
+                    <h1 class="text-xl mb-4 font-bold dark:text-slate-200 text-slate-500">Buat Siswa</h1>
                     <div class="grid md:grid-cols-2 gap-1">
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Nama Siswa</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Nama
+                                Siswa</label>
                             <input v-model="dataCreate.nama_siswa" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': createError.namaSiswaErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.namaSiswaErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ createError.namaSiswaErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">NISN</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">NISN</label>
                             <input v-model="dataCreate.nisn" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': createError.nisnErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.nisnErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ createError.nisnErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Password</label>
+                            <label
+                                class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Password</label>
                             <input v-model="dataCreate.password" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': createError.passwordErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.passwordErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ createError.passwordErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Password
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Password
                                 Konfirmasi</label>
                             <input v-model="dataCreate.password_konfirmasi" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': createError.passwordKonfirmasiErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.passwordKonfirmasiErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ createError.passwordKonfirmasiErrorMessage
                             }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Jurusan</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Jurusan</label>
                             <select v-model="dataCreate.nama_jurusan"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': createError.jurusanErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.jurusanErrorMessage }">
                                 <template v-for="(item, index) in dataJurusan" :key="index">
                                     <option :value="item.nama">{{
                                         item.nama }}</option>
@@ -386,11 +421,20 @@
                     </div>
                     <div class="flex justify-end gap-2">
                         <button @click="createSiswa"
-                            class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
+                            class="px-5 py-2.5 bg-blue-200 dark:bg-blue-400 hover:bg-blue-300 dark:hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                            </svg>
                             Simpan
                         </button>
                         <button @click="isFormCreateSiswa = false"
-                            class="px-5 py-2.5 bg-gray-400 hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                            class="px-5 py-2.5 bg-gray-200 dark:bg-gray-400 hover:bg-gray-300 dark:hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
                             Batal
                         </button>
                     </div>
@@ -429,7 +473,7 @@ export default {
                 field: 'nama_jurusan',
                 rule: 'asc'
             },
-            isLoading: false,
+            dataJurusan: [],
             isFormUploadSiswa: false,
             dataCreate: {
                 nama_siswa: '',
@@ -451,7 +495,7 @@ export default {
             dataDelete: [],
             isDeleteDialog: false,
             dataUpdate: [],
-            isUpdateDialog: false,
+            isFormEditSiswa: false,
             updateError: {
                 namaSiswaErrorMessage: '',
                 nisnErrorMessage: '',
@@ -459,8 +503,7 @@ export default {
                 passwordKonfirmasiErrorMessage: '',
                 jurusanErrorMessage: ''
             },
-            dataJurusan: [],
-
+            isLoading: false,
         }
     },
     components: {
@@ -698,11 +741,11 @@ export default {
                     console.error(error);
                 });
         },
-        showUpdateDialog(id) {
+        showFormEditSiswa(id) {
             const data = JSON.parse(JSON.stringify(this.data));
             const index = data.findIndex((item) => item.id === id);
             this.dataUpdate = data[index];
-            this.isUpdateDialog = true;
+            this.isFormEditSiswa = true;
         },
         updateSiswa() {
             axios.put("/api/admin/siswa/update", {
@@ -801,7 +844,7 @@ export default {
                     }
                 });
         },
-        exportXLSX(){
+        exportXLSX() {
             const ws = utils.json_to_sheet(this.data);
             const wb = utils.book_new();
             utils.book_append_sheet(wb, ws, "Data");

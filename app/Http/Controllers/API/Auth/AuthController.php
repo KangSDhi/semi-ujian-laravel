@@ -75,6 +75,7 @@ class AuthController extends Controller
     public function check(){
         $user = auth()->guard('jwt')->user();
         $data["role_id"] = $user->role_id;
+        $data["nama_user"] = $user->name;
         return response()->json([
             "code"  => 200,
             "data"  => $data
