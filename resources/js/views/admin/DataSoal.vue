@@ -10,9 +10,9 @@
                         </template>
                     </select>
                 </div>
-                <div class="justify-self-center space-x-2">
-                    <button @click="isCreateForm = true"
-                        class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm me-2 rounded-lg inline-flex items-center">
+                <div class="grid grid-cols-1">
+                    <button @click="isFormCreateSoal = true"
+                        class="px-5 py-2 h-10 w-40 justify-self-center bg-blue-200 dark:bg-blue-400 hover:bg-blue-300 dark:hover:bg-blue-500 text-sm me-2 rounded-lg inline-flex items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -53,7 +53,7 @@
                             <th scope="col" class="px-6 py-3">
                                 Waktu Mulai
                             </th>
-                            <th scope="col" class="px-6 py-3">
+                            <th scope="col" class="px-6 py-3 text-end">
                                 Aksi
                             </th>
                         </tr>
@@ -86,10 +86,34 @@
                                 <td class="px-6 py-4">
                                     {{ item.waktu_mulai }}
                                 </td>
-                                <td class="px-6 py-4 space-x-4 text-right">
-                                    <a :href="item.link" target="_blank">Link</a>
-                                    <button @click="showEditForm(item.id)">Edit</button>
-                                    <button @click="showDeleteDialog(item.id)">Hapus</button>
+                                <td class="px-6 py-4 space-x-2 text-right">
+                                    <a :href="item.link" target="_blank"
+                                        class="bg-yellow-200 px-2.5 py-1 text-gray-900 rounded-md inline-flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25" />
+                                        </svg>
+                                        Link
+                                    </a>
+                                    <button @click="showFormEditSoal(item.id)"
+                                        class="bg-blue-200 px-2.5 py-1 text-gray-900 rounded-md inline-flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                        </svg>
+                                        Edit
+                                    </button>
+                                    <button @click="showDeleteDialog(item.id)"
+                                        class="px-2.5 py-1 text-red-500 rounded-md inline-flex items-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        </svg>
+                                        Hapus
+                                    </button>
                                 </td>
                             </tr>
                         </template>
@@ -156,29 +180,30 @@
                     </div>
                 </div>
             </div>
-            <div v-show="isEditForm" class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
-                <div class="bg-white px-16 py-14 rounded-md">
-                    <h1 class="text-xl mb-4 font-bold text-slate-500">Edit Soal</h1>
+            <div v-show="isFormEditSoal"
+                class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white dark:bg-gray-900 px-16 py-14 rounded-md">
+                    <h1 class="text-xl mb-4 font-bold dark:text-slate-200 text-slate-500">Edit Soal</h1>
                     <div class="grid md:grid-cols-2 gap-1">
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Nama Soal</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Nama Soal</label>
                             <input v-model="dataUpdate.nama_soal" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': updateError.namaSoalErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.namaSoalErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ updateError.namaSoalErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Link</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Link</label>
                             <input v-model="dataUpdate.link" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': updateError.linkErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.linkErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ updateError.linkErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Jurusan</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Jurusan</label>
                             <select v-model="dataUpdate.nama_jurusan"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': updateError.jurusanErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.jurusanErrorMessage }">
                                 <option :value="null" :selected="dataUpdate.nama_jurusan === null">Semua</option>
                                 <template v-for="(item, index) in dataJurusan" :key="index">
                                     <option :value="item.nama" :selected="item.nama === dataUpdate.nama_jurusan">{{
@@ -188,49 +213,59 @@
                             <span class="text-red-500 text-sm font-bold">{{ updateError.jurusanErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Waktu Mulai</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Waktu Mulai</label>
                             <input v-model="dataUpdate.waktu_mulai" type="datetime-local"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': updateError.waktuMulaiErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.waktuMulaiErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ updateError.waktuMulaiErrorMessage }}</span>
                         </div>
                     </div>
                     <div class="flex mt-3 justify-end gap-2">
                         <button @click="updateSoal"
-                            class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
-                            Simpan
+                            class="px-5 py-2.5 bg-blue-200 dark:bg-blue-400 hover:bg-blue-300 dark:hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                            </svg>
+                            Perbarui
                         </button>
-                        <button @click="isEditForm = false"
-                            class="px-5 py-2.5 bg-gray-400 hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                        <button @click="isFormEditSoal = false"
+                            class="px-5 py-2.5 bg-gray-200 dark:bg-gray-400 hover:bg-gray-300 dark:hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
                             Batal
                         </button>
                     </div>
                 </div>
             </div>
-            <div v-show="isCreateForm" class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
-                <div class="bg-white px-16 py-14 rounded-md">
-                    <h1 class="text-xl mb-4 font-bold text-slate-500">Edit Soal</h1>
+            <div v-show="isFormCreateSoal"
+                class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                <div class="bg-white dark:bg-gray-900 px-16 py-14 rounded-md">
+                    <h1 class="text-xl mb-4 font-bold dark:text-slate-200 text-slate-500">Edit Soal</h1>
                     <div class="grid md:grid-cols-2 gap-1">
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Nama Soal</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Nama Soal</label>
                             <input v-model="dataCreate.nama_soal" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': createError.namaSoalErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.namaSoalErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ createError.namaSoalErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Link</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Link</label>
                             <input v-model="dataCreate.link" type="text"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': createError.linkErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.linkErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ createError.linkErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Jurusan</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Jurusan</label>
                             <select v-model="dataCreate.nama_jurusan"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': createError.jurusanErrorMessage }">
-                                <option :value="null" selected>Semua</option>
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.jurusanErrorMessage }">
+                                <option :value="null" :selected="true">Semua</option>
                                 <template v-for="(item, index) in dataJurusan" :key="index">
                                     <option :value="item.nama">{{
                                         item.nama }}</option>
@@ -239,20 +274,29 @@
                             <span class="text-red-500 text-sm font-bold">{{ createError.jurusanErrorMessage }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium text-white dark:text-gray-900">Waktu Mulai</label>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Waktu Mulai</label>
                             <input v-model="dataCreate.waktu_mulai" type="datetime-local"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'dark:border-2 dark:border-red-500': createError.waktuMulaiErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.waktuMulaiErrorMessage }">
                             <span class="text-red-500 text-sm font-bold">{{ createError.waktuMulaiErrorMessage }}</span>
                         </div>
                     </div>
                     <div class="flex mt-3 justify-end gap-2">
                         <button @click="createSoal"
-                            class="px-5 py-2.5 bg-blue-400 hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
+                            class="px-5 py-2.5 bg-blue-200 dark:bg-blue-400 hover:bg-blue-300 dark:hover:bg-blue-500 text-sm rounded-lg inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                            </svg>
                             Simpan
                         </button>
-                        <button @click="isCreateForm = false"
-                            class="px-5 py-2.5 bg-gray-400 hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                        <button @click="isFormCreateSoal = false"
+                            class="px-5 py-2.5 bg-gray-200 dark:bg-gray-400 hover:bg-gray-300 dark:hover:bg-gray-500 text-sm rounded-lg inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
                             Batal
                         </button>
                     </div>
@@ -297,7 +341,7 @@ export default {
                 nama_jurusan: '',
                 waktu_mulai: '',
             },
-            isCreateForm: false,
+            isFormCreateSoal: false,
             createError: {
                 namaSoalErrorMessage: '',
                 linkErrorMessage: '',
@@ -306,7 +350,7 @@ export default {
             },
             isDeleteDialog: false,
             dataDelete: [],
-            isEditForm: false,
+            isFormEditSoal: false,
             dataUpdate: [],
             updateError: {
                 namaSoalErrorMessage: '',
@@ -462,7 +506,7 @@ export default {
                     console.error(error);
                 });
         },
-        createSoal(){
+        createSoal() {
             axios.post("/api/admin/soal/create", {
                 nama_soal: this.dataCreate.nama_soal,
                 link: this.dataCreate.link,
@@ -473,41 +517,41 @@ export default {
                     "Authorization": "Bearer " + this.token
                 }
             })
-            .then(({ data }) => {
-                this.$router.go();
-            })
-            .catch(({ response }) => {
-                this.createError.namaSoalErrorMessage = '';
-                this.createError.linkErrorMessage = '';
-                this.createError.jurusanErrorMessage = '';
-                this.createError.waktuMulaiErrorMessage = '';
+                .then(({ data }) => {
+                    this.$router.go();
+                })
+                .catch(({ response }) => {
+                    this.createError.namaSoalErrorMessage = '';
+                    this.createError.linkErrorMessage = '';
+                    this.createError.jurusanErrorMessage = '';
+                    this.createError.waktuMulaiErrorMessage = '';
 
-                const errorMessages = response.data.error_message;
-                if (this.isObject(errorMessages)) {
-                    Object.keys(errorMessages).forEach((key) => {
-                        if (key == "nama_soal") {
-                            this.createError.namaSoalErrorMessage = errorMessages[key][0];
-                        }
-                        if (key == "link") {
-                            this.createError.linkErrorMessage = errorMessages[key][0];
-                        }
-                        if (key == "nama_jurusan") {
-                            this.createError.jurusanErrorMessage = errorMessages[key][0];
-                        }
-                        if (key == "waktu_mulai") {
-                            this.createError.waktuMulaiErrorMessage = errorMessages[key][0];
-                        }
-                    })
-                }
-            });
+                    const errorMessages = response.data.error_message;
+                    if (this.isObject(errorMessages)) {
+                        Object.keys(errorMessages).forEach((key) => {
+                            if (key == "nama_soal") {
+                                this.createError.namaSoalErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "link") {
+                                this.createError.linkErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "nama_jurusan") {
+                                this.createError.jurusanErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "waktu_mulai") {
+                                this.createError.waktuMulaiErrorMessage = errorMessages[key][0];
+                            }
+                        })
+                    }
+                });
         },
-        showEditForm(id) {
+        showFormEditSoal(id) {
             const data = JSON.parse(JSON.stringify(this.data));
             const index = data.findIndex((item) => item.id === id);
             this.dataUpdate = data[index];
-            this.isEditForm = true;
+            this.isFormEditSoal = true;
         },
-        updateSoal(){
+        updateSoal() {
             axios.put("/api/admin/soal/update", {
                 id: this.dataUpdate.id,
                 nama_soal: this.dataUpdate.nama_soal,
@@ -519,33 +563,33 @@ export default {
                     "Authorization": "Bearer " + this.token
                 }
             })
-            .then(({ data }) => {
-                this.$router.go();
-            })
-            .catch(({ response }) => {
-                this.updateError.namaSoalErrorMessage = '';
-                this.updateError.linkErrorMessage = '';
-                this.updateError.jurusanErrorMessage = '';
-                this.updateError.waktuMulaiErrorMessage = '';
+                .then(({ data }) => {
+                    this.$router.go();
+                })
+                .catch(({ response }) => {
+                    this.updateError.namaSoalErrorMessage = '';
+                    this.updateError.linkErrorMessage = '';
+                    this.updateError.jurusanErrorMessage = '';
+                    this.updateError.waktuMulaiErrorMessage = '';
 
-                const errorMessages = response.data.error_message;
-                if (this.isObject(errorMessages)) {
-                    Object.keys(errorMessages).forEach((key) => {
-                        if (key == "nama_soal") {
-                            this.updateError.namaSoalErrorMessage = errorMessages[key][0];
-                        }
-                        if (key == "link") {
-                            this.updateError.linkErrorMessage = errorMessages[key][0];
-                        }
-                        if (key == "nama_jurusan") {
-                            this.updateError.jurusanErrorMessage = errorMessages[key][0];
-                        }
-                        if (key == "waktu_mulai") {
-                            this.updateError.waktuMulaiErrorMessage = errorMessages[key][0];
-                        }
-                    })
-                }
-            })
+                    const errorMessages = response.data.error_message;
+                    if (this.isObject(errorMessages)) {
+                        Object.keys(errorMessages).forEach((key) => {
+                            if (key == "nama_soal") {
+                                this.updateError.namaSoalErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "link") {
+                                this.updateError.linkErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "nama_jurusan") {
+                                this.updateError.jurusanErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "waktu_mulai") {
+                                this.updateError.waktuMulaiErrorMessage = errorMessages[key][0];
+                            }
+                        })
+                    }
+                })
         },
         isObject(value) {
             return (
