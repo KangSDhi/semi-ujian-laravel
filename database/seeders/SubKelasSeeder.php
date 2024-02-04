@@ -32,7 +32,7 @@ class SubKelasSeeder extends Seeder
 
                     DB::table('sub_kelas')->insert($dataSubKelas);
                 }
-            }elseif (str_contains($getKelas[$i]->nama_kelas, 'KI') || str_contains($getKelas[$i]->nama_kelas, 'MEKA')) {
+            }elseif (str_contains($getKelas[$i]->nama_kelas, 'KI') || str_contains($getKelas[$i]->nama_kelas, 'MEKA') || str_contains($getKelas[$i]->nama_kelas, 'TP')) {
                 $dataSubKelas = array(
                     'kelas_id' => $getKelas[$i]->id,
                     'nama_sub_kelas' => $getKelas[$i]->nama_kelas,

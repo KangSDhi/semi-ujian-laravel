@@ -8,6 +8,8 @@ use App\Http\Controllers\API\Error\ErrorController as Error;
 use App\Http\Controllers\API\Soal\SoalController as Soal;
 use App\Http\Controllers\API\Siswa\SiswaController as Siswa;
 use App\Http\Controllers\API\Jurusan\JurusanController as Jurusan;
+use App\Http\Controllers\API\Kelas\KelasController as Kelas;
+use App\Http\Controllers\API\SubKelas\SubKelasController as SubKelas;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,5 +51,7 @@ Route::middleware(['auth:jwt', 'cekrole.admin'])->prefix('admin')->group(functio
     Route::put('/soal/update', [Soal::class, 'update']);
     Route::get('/soal/delete/{id}', [Soal::class, 'destroy']);
     Route::get('/jurusan', [Jurusan::class, 'index']);
+    Route::get('/kelas', [Kelas::class, 'index']);
+    Route::get('/subkelas', [SubKelas::class, 'index']);
     Route::get('/logout', [Auth::class, 'logout']);
 });
