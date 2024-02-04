@@ -6,20 +6,21 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Jurusan;
+use App\Models\SubKelas;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class SiswaController extends Controller
 {
     public function index(){
-        $siswa = User::join('jurusan', 'users.jurusan_id', 'jurusan.id')
+        $siswa = User::join('sub_kelas', 'users.sub_kelas_id', 'sub_kelas.id')
             ->select(DB::raw('users.id, 
             users.NISN as nisn, 
             users.name as nama_siswa,
-            jurusan.nama as nama_jurusan,
+            nama_sub_kelas,
             users.password_dec'))
             ->where('role_id', 2)
-            ->orderBy('jurusan.nama', 'asc')
+            ->orderBy('sub_kelas.nama_sub_kelas', 'asc')
             ->orderBy('users.name', 'asc')
             ->get();
         
@@ -35,10 +36,20 @@ class SiswaController extends Controller
             "nisn"          => "required|unique:users,NISN",
             "password"      => "required",
             "password_konfirmasi"   => "required|same:password",
-            "nama_jurusan"  => "required"
+            "nama_sub_kelas"  => "required"
         ];
 
-        $validator = Validator::make($request->all(), $rules);
+        $messages = [
+            "nama_siswa.required"           => "Mohon Isi Nama Siswa!",
+            "nisn.required"                 => "Mohon Isi NISN!",
+            "nisn.unique"                   => "NISN Sudah Terdaftar!",
+            "password.required"             => "Mohon Isi Password!",
+            "password_konfirmasi.required"  => "Mohon Isi Konfirmasi Password!",
+            "password_konfirmasi.same"      => "Password Konfirmasi Tidak Sama Dengan Password!",
+            "nama_sub_kelas.required"       => "Mohon Isi Sub Kelas!"
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             return response()->json([
@@ -47,14 +58,14 @@ class SiswaController extends Controller
             ], 400);
         }
 
-        $jurusan = Jurusan::where("nama", $request->nama_jurusan)->first();
+        $subKelas = SubKelas::where("nama_sub_kelas", $request->nama_sub_kelas)->first();
 
         $siswa = new User();
         $siswa->name = $request->nama_siswa;
         $siswa->NISN = $request->nisn;
         $siswa->password = bcrypt($request->password);
         $siswa->password_dec = $request->password;
-        $siswa->jurusan_id = $jurusan->id;
+        $siswa->sub_kelas_id = $subKelas->id;
         $siswa->role_id = 2;
         $siswa->save();
 
@@ -65,18 +76,20 @@ class SiswaController extends Controller
     }
 
     public function batchCreate(Request $request){
+        // dd($request->all());
         $rules = [
             "data.*.nama_siswa" => "required",
-            "data.*.nisn"   => "required",
-            "data.*.jurusan"    => "required"
+            "data.*.nisn"   => "required|unique:users,NISN",
+            "data.*.sub_kelas"    => "required"
         ];
 
         $messages = [];
 
         foreach($request->data as $key => $value){
-            $messages["data.$key.nama_siswa"] = "Baris Ke-".strval($key+2)." Nama Siswa Kosong!";
-            $messages["data.$key.nisn"] = "Baris Ke-".strval($key+2)." NISN Kosong!";
-            $messages["data.$key.jurusan"] = "Baris Ke-".strval($key+2)." Jurusan Kosong!";
+            $messages["data.$key.nama_siswa.required"] = "Baris Ke-".strval($key+2)." Nama Siswa Kosong!";
+            $messages["data.$key.nisn.required"] = "Baris Ke-".strval($key+2)." NISN Kosong!";
+            $messages["data.$key.nisn.unique"] = "Baris Ke-".strval($key+2)." NISN Sudah Terdaftar!";
+            $messages["data.$key.sub_kelas.required"] = "Baris Ke-".strval($key+2)." Sub Kelas Kosong!";
         }
 
 
@@ -96,14 +109,14 @@ class SiswaController extends Controller
         foreach ($dataRequest as $key => $value) {
             $pass = $this->generatePassword();
 
-            $jurusan = Jurusan::where('nama', $dataRequest[$key]['jurusan'])->first();
+            $subKelas = SubKelas::where('nama_sub_kelas', $dataRequest[$key]['sub_kelas'])->first();
 
             $dataStore[$key]['name'] = $dataRequest[$key]['nama_siswa'];
             $dataStore[$key]['NISN'] = $dataRequest[$key]['nisn'];
             $dataStore[$key]['password'] = bcrypt($pass);
             $dataStore[$key]['password_dec'] = $pass;
             $dataStore[$key]['role_id'] = 2;
-            $dataStore[$key]['jurusan_id'] = $jurusan->id;
+            $dataStore[$key]['sub_kelas_id'] = $subKelas->id;
         }
 
         DB::beginTransaction();
@@ -117,9 +130,10 @@ class SiswaController extends Controller
         } catch (\Exception $exception) {
             DB::rollback();
 
-            return resonse()->json([
+            return response()->json([
                 "code"  => 500,
-                "error_message" => "internal server error"
+                "error_status"  => "Internal Server Error!",
+                "error_message" => $exception->getMessage(),
             ], 500);
         }
 
@@ -131,14 +145,14 @@ class SiswaController extends Controller
             "id"    => "required",
             "nisn"  => "required",
             "nama_siswa"    => "required",
-            "nama_jurusan"  => "required",
+            "nama_sub_kelas"  => "required",
             "password"  => "required",
         ];
 
         $messages = [
             "nisn.required" => "Mohon Isi NISN!",
             "nama_siswa.required" => "Mohon Isi Nama Siswa!",
-            "nama_jurusan.required" => "Mohon Isi Nama Jurusan!",
+            "nama_sub_kelas.required" => "Mohon Isi Sub Kelas!",
             "password.required" => "Mohon Isi Password!",
             "konfirmasi_password.same" => "Konfirmasi Password Tidak Sama Dengan Password!",
         ];
@@ -156,13 +170,13 @@ class SiswaController extends Controller
             ], 400);
         }
 
-        $jurusan = Jurusan::where('nama', $request->nama_jurusan)->first();
+        $subKelas = SubKelas::where('nama_sub_kelas', $request->nama_sub_kelas)->first();
 
         $siswa = User::find($request->id);
 
         $siswa->name = $request->nama_siswa;
         $siswa->NISN = $request->nisn;
-        $siswa->jurusan_id = $jurusan->id;
+        $siswa->sub_kelas_id = $subKelas->id;
         $siswa->password = bcrypt($request->password);
         $siswa->password_dec = $request->password;
         $siswa->save();

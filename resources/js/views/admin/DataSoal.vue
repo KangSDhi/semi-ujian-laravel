@@ -262,16 +262,16 @@
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Jurusan</label>
-                            <select v-model="dataCreate.nama_jurusan"
+                            <select v-model="dataCreate.nama_kelas"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.jurusanErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.namaKelasErrorMessage }">
                                 <option :value="null" :selected="true">Semua</option>
-                                <template v-for="(item, index) in dataJurusan" :key="index">
-                                    <option :value="item.nama">{{
-                                        item.nama }}</option>
+                                <template v-for="(item, index) in dataKelas" :key="index">
+                                    <option :value="item.nama_kelas">{{
+                                        item.nama_kelas }}</option>
                                 </template>
                             </select>
-                            <span class="text-red-500 text-sm font-bold">{{ createError.jurusanErrorMessage }}</span>
+                            <span class="text-red-500 text-sm font-bold">{{ createError.namaKelasErrorMessage }}</span>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Waktu Mulai</label>
@@ -334,18 +334,18 @@ export default {
                 field: 'nama_jurusan',
                 rule: 'asc'
             },
-            dataJurusan: [],
+            dataKelas: [],
             dataCreate: {
                 nama_soal: '',
                 link: '',
-                nama_jurusan: '',
+                nama_kelas: '',
                 waktu_mulai: '',
             },
             isFormCreateSoal: false,
             createError: {
                 namaSoalErrorMessage: '',
                 linkErrorMessage: '',
-                jurusanErrorMessage: '',
+                namaKelasErrorMessage: '',
                 waktuMulaiErrorMessage: ''
             },
             isDeleteDialog: false,
@@ -354,7 +354,7 @@ export default {
             dataUpdate: [],
             updateError: {
                 namaSoalErrorMessage: '',
-                jurusanErrorMessage: '',
+                namaKelasErrorMessage: '',
                 linkErrorMessage: '',
                 waktuMulaiErrorMessage: ''
             }
@@ -371,17 +371,17 @@ export default {
     },
     mounted() {
         this.getSoal();
-        this.getJurusan();
+        this.getSubKelas();
     },
     methods: {
-        getJurusan() {
-            axios.get("/api/admin/jurusan", {
+        getSubKelas() {
+            axios.get("/api/admin/kelas", {
                 headers: {
                     "Authorization": "Bearer " + this.token
                 }
             })
                 .then(({ data }) => {
-                    this.dataJurusan = data.data;
+                    this.dataKelas = data.data;
                 })
                 .catch(({ response }) => {
                     console.error(response);
@@ -478,7 +478,7 @@ export default {
             if (value.length >= 1) {
                 const options = {
                     shouldSort: true,
-                    keys: ['nama_soal', 'nama_jurusan'],
+                    keys: ['nama_soal', 'nama_kelas'],
                     threshold: 0
                 };
                 const fuse = new Fuse(this.data, options);

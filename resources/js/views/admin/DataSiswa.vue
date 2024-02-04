@@ -100,7 +100,7 @@
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center gap-2">
-                                    <span>Jurusan</span>
+                                    <span>Nama Sub Kelas</span>
                                     <div class="flex flex-col">
                                         <svg @click="sort('nama_jurusan', 'asc')" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="4" viewBox="0 0 24 24"
@@ -144,7 +144,7 @@
                                     {{ item.nama_siswa }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ item.nama_jurusan }}
+                                    {{ item.nama_sub_kelas }}
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ item.password_dec }}
@@ -322,15 +322,15 @@
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Jurusan</label>
-                            <select v-model="dataUpdate.nama_jurusan"
+                            <select v-model="dataUpdate.nama_sub_kelas"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.jurusanErrorMessage }">
-                                <template v-for="(item, index) in dataJurusan" :key="index">
-                                    <option :value="item.nama" :selected="item.nama === dataUpdate.nama_jurusan">{{
-                                        item.nama }}</option>
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.subKelasErrorMessage }">
+                                <template v-for="(item, index) in dataSubKelas" :key="index">
+                                    <option :value="item.nama_sub_kelas" :selected="item.nama_sub_kelas === dataUpdate.nama_sub_kelas">{{
+                                        item.nama_sub_kelas }}</option>
                                 </template>
                             </select>
-                            <span class="text-red-500 text-sm font-bold">{{ updateError.jurusanErrorMessage }}</span>
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.subKelasErrorMessage }}</span>
                         </div>
                     </div>
                     <div class="flex justify-end gap-2">
@@ -407,16 +407,16 @@
                             }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Jurusan</label>
-                            <select v-model="dataCreate.nama_jurusan"
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Sub Kelas</label>
+                            <select v-model="dataCreate.nama_sub_kelas"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.jurusanErrorMessage }">
-                                <template v-for="(item, index) in dataJurusan" :key="index">
-                                    <option :value="item.nama">{{
-                                        item.nama }}</option>
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.subKelasErrorMessage }">
+                                <template v-for="(item, index) in dataSubKelas" :key="index">
+                                    <option :value="item.nama_sub_kelas">{{
+                                        item.nama_sub_kelas }}</option>
                                 </template>
                             </select>
-                            <span class="text-red-500 text-sm font-bold">{{ createError.jurusanErrorMessage }}</span>
+                            <span class="text-red-500 text-sm font-bold">{{ createError.subKelasErrorMessage }}</span>
                         </div>
                     </div>
                     <div class="flex justify-end gap-2">
@@ -470,24 +470,24 @@ export default {
                 to: 10
             },
             sorted: {
-                field: 'nama_jurusan',
+                field: 'nama_sub_kelas',
                 rule: 'asc'
             },
-            dataJurusan: [],
+            dataSubKelas: [],
             isFormUploadSiswa: false,
             dataCreate: {
                 nama_siswa: '',
                 nisn: '',
                 password: '',
                 password_konfirmasi: '',
-                nama_jurusan: '',
+                nama_sub_kelas: '',
             },
             createError: {
                 namaSiswaErrorMessage: '',
                 nisnErrorMessage: '',
                 passwordErrorMessage: '',
                 passwordKonfirmasiErrorMessage: '',
-                jurusanErrorMessage: ''
+                subKelasErrorMessage: ''
             },
             uploadError: [],
             isFormCreateSiswa: false,
@@ -501,7 +501,7 @@ export default {
                 nisnErrorMessage: '',
                 passwordErrorMessage: '',
                 passwordKonfirmasiErrorMessage: '',
-                jurusanErrorMessage: ''
+                subKelasErrorMessage: ''
             },
             isLoading: false,
         }
@@ -510,7 +510,7 @@ export default {
         BaseLayout
     },
     mounted() {
-        this.getJurusan();
+        this.getSubKelas();
         this.getSiswa();
     },
     watch: {
@@ -519,14 +519,14 @@ export default {
         }
     },
     methods: {
-        getJurusan() {
-            axios.get("/api/admin/jurusan", {
+        getSubKelas() {
+            axios.get("/api/admin/subkelas", {
                 headers: {
                     "Authorization": "Bearer " + this.token
                 }
             })
                 .then(({ data }) => {
-                    this.dataJurusan = data.data;
+                    this.dataSubKelas = data.data;
                 })
                 .catch(({ response }) => {
                     console.error(response);
@@ -622,7 +622,7 @@ export default {
             if (value.length >= 1) {
                 const options = {
                     shouldSort: true,
-                    keys: ['nama_siswa', 'nisn'],
+                    keys: ['nama_siswa', 'nisn', 'nama_sub_kelas'],
                     threshold: 0
                 };
                 const fuse = new Fuse(this.data, options);
@@ -752,7 +752,7 @@ export default {
                 id: this.dataUpdate.id,
                 nisn: this.dataUpdate.nisn,
                 nama_siswa: this.dataUpdate.nama_siswa,
-                nama_jurusan: this.dataUpdate.nama_jurusan,
+                nama_sub_kelas: this.dataUpdate.nama_sub_kelas,
                 password: this.dataUpdate.password_dec,
                 konfirmasi_password: this.dataUpdate.password_konfirmasi,
                 _method: "put"
@@ -805,7 +805,7 @@ export default {
                 nisn: this.dataCreate.nisn,
                 password: this.dataCreate.password,
                 password_konfirmasi: this.dataCreate.password_konfirmasi,
-                nama_jurusan: this.dataCreate.nama_jurusan
+                nama_sub_kelas: this.dataCreate.nama_sub_kelas
             }, {
                 headers: {
                     "Authorization": "Bearer " + this.token
@@ -818,7 +818,7 @@ export default {
                 .catch(({ response }) => {
                     this.createError.nisnErrorMessage = '';
                     this.createError.namaSiswaErrorMessage = '';
-                    this.createError.jurusanErrorMessage = '';
+                    this.createError.subKelasErrorMessage = '';
                     this.createError.passwordErrorMessage = '';
                     this.createError.passwordKonfirmasiErrorMessage = '';
                     console.error(response);
@@ -837,8 +837,8 @@ export default {
                             if (key == "password_konfirmasi") {
                                 this.createError.passwordKonfirmasiErrorMessage = errorMessages[key][0];
                             }
-                            if (key == "nama_jurusan") {
-                                this.createError.jurusanErrorMessage = errorMessages[key][0];
+                            if (key == "nama_sub_kelas") {
+                                this.createError.subKelasErrorMessage = errorMessages[key][0];
                             }
                         })
                     }
