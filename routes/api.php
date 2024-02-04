@@ -8,8 +8,8 @@ use App\Http\Controllers\API\Error\ErrorController as Error;
 use App\Http\Controllers\API\Soal\SoalController as Soal;
 use App\Http\Controllers\API\Siswa\SiswaController as Siswa;
 use App\Http\Controllers\API\Jurusan\JurusanController as Jurusan;
+use App\Http\Controllers\API\Tingkat\TingkatController as Tingkat;
 use App\Http\Controllers\API\Kelas\KelasController as Kelas;
-use App\Http\Controllers\API\SubKelas\SubKelasController as SubKelas;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,12 +46,12 @@ Route::middleware(['auth:jwt', 'cekrole.admin'])->prefix('admin')->group(functio
     Route::post('/siswa/create/batch', [Siswa::class, 'batchCreate']);
     Route::put('/siswa/update', [Siswa::class, 'update']);
     Route::get('/siswa/delete/{id}', [Siswa::class, 'destroy']);
-    Route::get('/soal', [Soal::class, 'getSoalJoinJurusan']);
+    Route::get('/soal', [Soal::class, 'getSoalJoinJurusanTingkat']);
     Route::post('/soal/create', [Soal::class, 'create']);
     Route::put('/soal/update', [Soal::class, 'update']);
     Route::get('/soal/delete/{id}', [Soal::class, 'destroy']);
     Route::get('/jurusan', [Jurusan::class, 'index']);
+    Route::get('/tingkat', [Tingkat::class, 'index']);
     Route::get('/kelas', [Kelas::class, 'index']);
-    Route::get('/subkelas', [SubKelas::class, 'index']);
     Route::get('/logout', [Auth::class, 'logout']);
 });

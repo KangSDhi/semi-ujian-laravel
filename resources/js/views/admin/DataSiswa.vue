@@ -52,7 +52,7 @@
                         </div>
                         <input v-model="searchInput" type="search" id="default-search"
                             class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Cari Nama, NISN ....">
+                            placeholder="Cari Nama, NISN, Kelas ....">
 
                     </div>
                 </div>
@@ -100,14 +100,14 @@
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <div class="flex items-center gap-2">
-                                    <span>Nama Sub Kelas</span>
+                                    <span>Nama Kelas</span>
                                     <div class="flex flex-col">
-                                        <svg @click="sort('nama_jurusan', 'asc')" fill="none" stroke-linecap="round"
+                                        <svg @click="sort('nama_kelas', 'asc')" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="4" viewBox="0 0 24 24"
                                             stroke="currentColor" width="12px" height="12px" class="cursor-pointer">
                                             <path d="M5 15l7-7 7 7"></path>
                                         </svg>
-                                        <svg @click="sort('nama_jurusan', 'desc')" fill="none" stroke-linecap="round"
+                                        <svg @click="sort('nama_kelas', 'desc')" fill="none" stroke-linecap="round"
                                             stroke-linejoin="round" stroke-width="4" viewBox="0 0 24 24"
                                             stroke="currentColor" width="12px" height="12px" class="cursor-pointer">
                                             <path d="M19 9l-7 7-7-7"></path>
@@ -144,7 +144,7 @@
                                     {{ item.nama_siswa }}
                                 </td>
                                 <td class="px-6 py-4">
-                                    {{ item.nama_sub_kelas }}
+                                    {{ item.nama_kelas }}
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ item.password_dec }}
@@ -321,16 +321,16 @@
                             }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Jurusan</label>
-                            <select v-model="dataUpdate.nama_sub_kelas"
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Kelas</label>
+                            <select v-model="dataUpdate.nama_kelas"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.subKelasErrorMessage }">
-                                <template v-for="(item, index) in dataSubKelas" :key="index">
-                                    <option :value="item.nama_sub_kelas" :selected="item.nama_sub_kelas === dataUpdate.nama_sub_kelas">{{
-                                        item.nama_sub_kelas }}</option>
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.kelasErrorMessage }">
+                                <template v-for="(item, index) in dataKelas" :key="index">
+                                    <option :value="item.nama_kelas" :selected="item.nama_kelas === dataUpdate.nama_kelas">{{
+                                        item.nama_kelas }}</option>
                                 </template>
                             </select>
-                            <span class="text-red-500 text-sm font-bold">{{ updateError.subKelasErrorMessage }}</span>
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.kelasErrorMessage }}</span>
                         </div>
                     </div>
                     <div class="flex justify-end gap-2">
@@ -407,16 +407,16 @@
                             }}</span>
                         </div>
                         <div>
-                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Sub Kelas</label>
-                            <select v-model="dataCreate.nama_sub_kelas"
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Kelas</label>
+                            <select v-model="dataCreate.nama_kelas"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.subKelasErrorMessage }">
-                                <template v-for="(item, index) in dataSubKelas" :key="index">
-                                    <option :value="item.nama_sub_kelas">{{
-                                        item.nama_sub_kelas }}</option>
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.kelasErrorMessage }">
+                                <template v-for="(item, index) in dataKelas" :key="index">
+                                    <option :value="item.nama_kelas">{{
+                                        item.nama_kelas }}</option>
                                 </template>
                             </select>
-                            <span class="text-red-500 text-sm font-bold">{{ createError.subKelasErrorMessage }}</span>
+                            <span class="text-red-500 text-sm font-bold">{{ createError.kelasErrorMessage }}</span>
                         </div>
                     </div>
                     <div class="flex justify-end gap-2">
@@ -470,24 +470,24 @@ export default {
                 to: 10
             },
             sorted: {
-                field: 'nama_sub_kelas',
+                field: 'nama_kelas',
                 rule: 'asc'
             },
-            dataSubKelas: [],
+            dataKelas: [],
             isFormUploadSiswa: false,
             dataCreate: {
                 nama_siswa: '',
                 nisn: '',
                 password: '',
                 password_konfirmasi: '',
-                nama_sub_kelas: '',
+                nama_kelas: '',
             },
             createError: {
                 namaSiswaErrorMessage: '',
                 nisnErrorMessage: '',
                 passwordErrorMessage: '',
                 passwordKonfirmasiErrorMessage: '',
-                subKelasErrorMessage: ''
+                kelasErrorMessage: ''
             },
             uploadError: [],
             isFormCreateSiswa: false,
@@ -501,7 +501,7 @@ export default {
                 nisnErrorMessage: '',
                 passwordErrorMessage: '',
                 passwordKonfirmasiErrorMessage: '',
-                subKelasErrorMessage: ''
+                kelasErrorMessage: ''
             },
             isLoading: false,
         }
@@ -510,7 +510,7 @@ export default {
         BaseLayout
     },
     mounted() {
-        this.getSubKelas();
+        this.getKelas();
         this.getSiswa();
     },
     watch: {
@@ -519,14 +519,14 @@ export default {
         }
     },
     methods: {
-        getSubKelas() {
-            axios.get("/api/admin/subkelas", {
+        getKelas() {
+            axios.get("/api/admin/kelas", {
                 headers: {
                     "Authorization": "Bearer " + this.token
                 }
             })
                 .then(({ data }) => {
-                    this.dataSubKelas = data.data;
+                    this.dataKelas = data.data;
                 })
                 .catch(({ response }) => {
                     console.error(response);
@@ -622,7 +622,7 @@ export default {
             if (value.length >= 1) {
                 const options = {
                     shouldSort: true,
-                    keys: ['nama_siswa', 'nisn', 'nama_sub_kelas'],
+                    keys: ['nama_siswa', 'nisn', 'nama_kelas'],
                     threshold: 0
                 };
                 const fuse = new Fuse(this.data, options);
@@ -638,7 +638,7 @@ export default {
         },
         compareOnKey(key, rule) {
             return function (a, b) {
-                if (key === "nisn" || key == "nama_siswa" || key == "nama_jurusan") {
+                if (key === "nisn" || key == "nama_siswa" || key == "nama_kelas") {
                     let comparison = 0;
                     const fieldA = a[key].toUpperCase();
                     const fieldB = b[key].toUpperCase();
@@ -752,7 +752,7 @@ export default {
                 id: this.dataUpdate.id,
                 nisn: this.dataUpdate.nisn,
                 nama_siswa: this.dataUpdate.nama_siswa,
-                nama_sub_kelas: this.dataUpdate.nama_sub_kelas,
+                nama_kelas: this.dataUpdate.nama_kelas,
                 password: this.dataUpdate.password_dec,
                 konfirmasi_password: this.dataUpdate.password_konfirmasi,
                 _method: "put"
@@ -768,7 +768,7 @@ export default {
                 .catch(({ response }) => {
                     this.updateError.nisnErrorMessage = '';
                     this.updateError.namaSiswaErrorMessage = '';
-                    this.updateError.jurusanErrorMessage = '';
+                    this.updateError.kelasErrorMessage = '';
                     this.updateError.passwordErrorMessage = '';
                     this.updateError.passwordKonfirmasiErrorMessage = '';
                     const errorMessage = response.data.error_message;
@@ -780,8 +780,8 @@ export default {
                             if (key == "nama_siswa") {
                                 this.updateError.namaSiswaErrorMessage = errorMessage[key][0];
                             }
-                            if (key == "nama_jurusan") {
-                                this.updateError.jurusanErrorMessage = errorMessage[key][0];
+                            if (key == "nama_kelas") {
+                                this.updateError.kelasErrorMessage = errorMessage[key][0];
                             }
                             if (key == "password") {
                                 this.updateError.passwordErrorMessage = errorMessage[key][0];
@@ -805,7 +805,7 @@ export default {
                 nisn: this.dataCreate.nisn,
                 password: this.dataCreate.password,
                 password_konfirmasi: this.dataCreate.password_konfirmasi,
-                nama_sub_kelas: this.dataCreate.nama_sub_kelas
+                nama_kelas: this.dataCreate.nama_kelas
             }, {
                 headers: {
                     "Authorization": "Bearer " + this.token
@@ -818,7 +818,7 @@ export default {
                 .catch(({ response }) => {
                     this.createError.nisnErrorMessage = '';
                     this.createError.namaSiswaErrorMessage = '';
-                    this.createError.subKelasErrorMessage = '';
+                    this.createError.kelasErrorMessage = '';
                     this.createError.passwordErrorMessage = '';
                     this.createError.passwordKonfirmasiErrorMessage = '';
                     console.error(response);
@@ -837,8 +837,8 @@ export default {
                             if (key == "password_konfirmasi") {
                                 this.createError.passwordKonfirmasiErrorMessage = errorMessages[key][0];
                             }
-                            if (key == "nama_sub_kelas") {
-                                this.createError.subKelasErrorMessage = errorMessages[key][0];
+                            if (key == "nama_kelas") {
+                                this.createError.kelasErrorMessage = errorMessages[key][0];
                             }
                         })
                     }
