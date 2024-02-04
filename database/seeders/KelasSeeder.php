@@ -54,16 +54,48 @@ class KelasSeeder extends Seeder
             }
 
             for ($j=0; $j < count($getTingkat) ; $j++) { 
-                $dataKelas = array(
-                    array(
-                        'jurusan_id'    => $getJurusan[$i]->id,
-                        'tingkat_id'    => $getTingkat[$j]->id,
-                        'nama_kelas'    => $getTingkat[$j]->nama_tingkat."-".$jurusan,
-                        'created_at'    => date("Y-m-d H:i:s"),
-                        'updated_at'    => date("Y-m-d H:i:s"),
-                    ),
-                );
-                DB::table('kelas')->insert($dataKelas);
+
+                if (str_contains($jurusan, 'TKRO')) {
+                    for ($h=0; $h < 3 ; $h++) { 
+                        $dataKelas = array(
+                            array(
+                                'jurusan_id'    => $getJurusan[$i]->id,
+                                'tingkat_id'    => $getTingkat[$j]->id,
+                                'nama_kelas'    => $getTingkat[$j]->nama_tingkat."-".$jurusan."-".strval($h+1),
+                                'created_at'    => date("Y-m-d H:i:s"),
+                                'updated_at'    => date("Y-m-d H:i:s"),
+                            ),
+                        );
+
+                        DB::table('kelas')->insert($dataKelas);
+                    }
+                }elseif(str_contains($jurusan, 'KI') || str_contains($jurusan, 'MEKA') || str_contains($jurusan, 'TP')){
+                    $dataKelas = array(
+                        array(
+                            'jurusan_id'    => $getJurusan[$i]->id,
+                            'tingkat_id'    => $getTingkat[$j]->id,
+                            'nama_kelas'    => $getTingkat[$j]->nama_tingkat."-".$jurusan,
+                            'created_at'    => date("Y-m-d H:i:s"),
+                            'updated_at'    => date("Y-m-d H:i:s"),
+                        ),
+                    );
+
+                    DB::table('kelas')->insert($dataKelas);
+                }else{
+                    for ($h=0; $h < 2 ; $h++) { 
+                        $dataKelas = array(
+                            array(
+                                'jurusan_id'    => $getJurusan[$i]->id,
+                                'tingkat_id'    => $getTingkat[$j]->id,
+                                'nama_kelas'    => $getTingkat[$j]->nama_tingkat."-".$jurusan."-".strval($h+1),
+                                'created_at'    => date("Y-m-d H:i:s"),
+                                'updated_at'    => date("Y-m-d H:i:s"),
+                            ),
+                        );
+
+                        DB::table('kelas')->insert($dataKelas);
+                    }
+                } 
             }
         }
     }
