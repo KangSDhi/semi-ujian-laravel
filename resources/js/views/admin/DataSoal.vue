@@ -51,6 +51,9 @@
                                 Jurusan
                             </th>
                             <th scope="col" class="px-6 py-3">
+                                Tingkat
+                            </th>
+                            <th scope="col" class="px-6 py-3">
                                 Waktu Mulai
                             </th>
                             <th scope="col" class="px-6 py-3 text-end">
@@ -62,7 +65,7 @@
                         <template v-if="items.length == 0">
                             <tr
                                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <th class="text-xl text-center py-2.5" colspan="5">Data Kosong</th>
+                                <th class="text-xl text-center py-2.5" colspan="6">Data Kosong</th>
                             </tr>
                         </template>
                         <template v-for="(item, index) in items" :key="index">
@@ -82,6 +85,9 @@
                                     <template v-else>
                                         <span>Semua</span>
                                     </template>
+                                </td>
+                                <td class="px-6 py-4">
+                                    {{ item.nama_tingkat }}
                                 </td>
                                 <td class="px-6 py-4">
                                     {{ item.waktu_mulai }}
@@ -203,14 +209,27 @@
                             <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Jurusan</label>
                             <select v-model="dataUpdate.nama_jurusan"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.jurusanErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.namaJurusanErrorMessage }">
                                 <option :value="null" :selected="dataUpdate.nama_jurusan === null">Semua</option>
                                 <template v-for="(item, index) in dataJurusan" :key="index">
-                                    <option :value="item.nama" :selected="item.nama === dataUpdate.nama_jurusan">{{
-                                        item.nama }}</option>
+                                    <option :value="item.nama_jurusan" :selected="item.nama_jurusan === dataUpdate.nama_jurusan">{{
+                                        item.nama_jurusan }}</option>
                                 </template>
                             </select>
-                            <span class="text-red-500 text-sm font-bold">{{ updateError.jurusanErrorMessage }}</span>
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.namaJurusanErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Tingkat</label>
+                            <select v-model="dataUpdate.nama_tingkat"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.namaTingkatErrorMessage }">
+                                <option :value="null" :selected="dataUpdate.nama_tingkat === null">Semua</option>
+                                <template v-for="(item, index) in dataTingkat" :key="index">
+                                    <option :value="item.nama_tingkat" :selected="item.nama_tingkat === dataUpdate.nama_tingkat">{{
+                                        item.nama_tingkat }}</option>
+                                </template>
+                            </select>
+                            <span class="text-red-500 text-sm font-bold">{{ updateError.namaTingkatErrorMessage }}</span>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Waktu Mulai</label>
@@ -262,16 +281,28 @@
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Jurusan</label>
-                            <select v-model="dataCreate.nama_kelas"
+                            <select v-model="dataCreate.nama_jurusan"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.namaKelasErrorMessage }">
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.namaJurusanErrorMessage }">
                                 <option :value="null" :selected="true">Semua</option>
-                                <template v-for="(item, index) in dataKelas" :key="index">
-                                    <option :value="item.nama_kelas">{{
-                                        item.nama_kelas }}</option>
+                                <template v-for="(item, index) in dataJurusan" :key="index">
+                                    <option :value="item.nama_jurusan">{{
+                                        item.nama_jurusan }}</option>
                                 </template>
                             </select>
-                            <span class="text-red-500 text-sm font-bold">{{ createError.namaKelasErrorMessage }}</span>
+                            <span class="text-red-500 text-sm font-bold">{{ createError.namaJurusanErrorMessage }}</span>
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Tingkat</label>
+                            <select v-model="dataCreate.nama_tingkat"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': createError.namaTingkatErrorMessage }">
+                                <template v-for="(item, index) in dataTingkat" :key="index">
+                                    <option :value="item.nama_tingkat">{{
+                                        item.nama_tingkat }}</option>
+                                </template>
+                            </select>
+                            <span class="text-red-500 text-sm font-bold">{{ createError.namaTingkatErrorMessage }}</span>
                         </div>
                         <div>
                             <label class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Waktu Mulai</label>
@@ -334,18 +365,21 @@ export default {
                 field: 'nama_jurusan',
                 rule: 'asc'
             },
-            dataKelas: [],
+            dataJurusan: [],
+            dataTingkat: [],
             dataCreate: {
                 nama_soal: '',
                 link: '',
-                nama_kelas: '',
+                nama_jurusan: '',
+                nama_tingkat: '',
                 waktu_mulai: '',
             },
             isFormCreateSoal: false,
             createError: {
                 namaSoalErrorMessage: '',
                 linkErrorMessage: '',
-                namaKelasErrorMessage: '',
+                namaJurusanErrorMessage: '',
+                namaTingkatErrorMessage: '',
                 waktuMulaiErrorMessage: ''
             },
             isDeleteDialog: false,
@@ -354,7 +388,8 @@ export default {
             dataUpdate: [],
             updateError: {
                 namaSoalErrorMessage: '',
-                namaKelasErrorMessage: '',
+                namaJurusanErrorMessage: '',
+                namaTingkatErrorMessage: '',
                 linkErrorMessage: '',
                 waktuMulaiErrorMessage: ''
             }
@@ -371,17 +406,31 @@ export default {
     },
     mounted() {
         this.getSoal();
-        this.getSubKelas();
+        this.getJurusan();
+        this.getTingkat();
     },
     methods: {
-        getSubKelas() {
-            axios.get("/api/admin/kelas", {
+        getJurusan() {
+            axios.get("/api/admin/jurusan", {
                 headers: {
                     "Authorization": "Bearer " + this.token
                 }
             })
                 .then(({ data }) => {
-                    this.dataKelas = data.data;
+                    this.dataJurusan = data.data;
+                })
+                .catch(({ response }) => {
+                    console.error(response);
+                });
+        },
+        getTingkat(){
+            axios.get("/api/admin/tingkat", {
+                headers: {
+                    "Authorization": "Bearer " + this.token
+                }
+            })
+                .then(({ data }) => {
+                    this.dataTingkat = data.data;
                 })
                 .catch(({ response }) => {
                     console.error(response);
@@ -478,7 +527,7 @@ export default {
             if (value.length >= 1) {
                 const options = {
                     shouldSort: true,
-                    keys: ['nama_soal', 'nama_kelas'],
+                    keys: ['nama_soal', 'nama_jurusan', 'nama_tingkat'],
                     threshold: 0
                 };
                 const fuse = new Fuse(this.data, options);
@@ -511,6 +560,7 @@ export default {
                 nama_soal: this.dataCreate.nama_soal,
                 link: this.dataCreate.link,
                 nama_jurusan: this.dataCreate.nama_jurusan,
+                nama_tingkat: this.dataCreate.nama_tingkat,
                 waktu_mulai: this.dataCreate.waktu_mulai
             }, {
                 headers: {
@@ -523,7 +573,8 @@ export default {
                 .catch(({ response }) => {
                     this.createError.namaSoalErrorMessage = '';
                     this.createError.linkErrorMessage = '';
-                    this.createError.jurusanErrorMessage = '';
+                    this.createError.namaJurusanErrorMessage = '';
+                    this.createError.namaTingkatErrorMessage = '';
                     this.createError.waktuMulaiErrorMessage = '';
 
                     const errorMessages = response.data.error_message;
@@ -536,7 +587,10 @@ export default {
                                 this.createError.linkErrorMessage = errorMessages[key][0];
                             }
                             if (key == "nama_jurusan") {
-                                this.createError.jurusanErrorMessage = errorMessages[key][0];
+                                this.createError.namaJurusanErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "nama_tingkat") {
+                                this.createError.namaTingkatErrorMessage = errorMessages[key][0];
                             }
                             if (key == "waktu_mulai") {
                                 this.createError.waktuMulaiErrorMessage = errorMessages[key][0];
@@ -557,6 +611,7 @@ export default {
                 nama_soal: this.dataUpdate.nama_soal,
                 link: this.dataUpdate.link,
                 nama_jurusan: this.dataUpdate.nama_jurusan,
+                nama_tingkat: this.dataUpdate.nama_tingkat,
                 waktu_mulai: this.dataUpdate.waktu_mulai
             }, {
                 headers: {
@@ -569,7 +624,8 @@ export default {
                 .catch(({ response }) => {
                     this.updateError.namaSoalErrorMessage = '';
                     this.updateError.linkErrorMessage = '';
-                    this.updateError.jurusanErrorMessage = '';
+                    this.updateError.namaJurusanErrorMessage = '';
+                    this.updateError.namaTingkatErrorMessage = '';
                     this.updateError.waktuMulaiErrorMessage = '';
 
                     const errorMessages = response.data.error_message;
@@ -582,7 +638,10 @@ export default {
                                 this.updateError.linkErrorMessage = errorMessages[key][0];
                             }
                             if (key == "nama_jurusan") {
-                                this.updateError.jurusanErrorMessage = errorMessages[key][0];
+                                this.updateError.namaJurusanErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "nama_tingkat") {
+                                this.updateError.namaTingkatErrorMessage = errorMessages[key][0];
                             }
                             if (key == "waktu_mulai") {
                                 this.updateError.waktuMulaiErrorMessage = errorMessages[key][0];

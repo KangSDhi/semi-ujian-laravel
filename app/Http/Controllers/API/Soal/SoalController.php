@@ -7,34 +7,37 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Soal;
 use App\Models\Jurusan;
+use App\Models\Tingkat;
 use Illuminate\Support\Facades\Validator;
 
 class SoalController extends Controller
 {
     public function getSoalByUser(){
         $getUser = auth('jwt')->user();
-        $getToday = date("Y-m-d");
+        dd($getUser->kelas->jurusan_id);
+        // $getToday = date("Y-m-d");
 
-        $getSoal = DB::table(function($query) use ($getToday){
-            $query->select(DB::raw('id, nama_soal, link, jurusan_id, waktu_mulai'))
-                ->from('soal')
-                ->where('waktu_mulai', 'LIKE', $getToday.'%');
-        })->where(function($query) use ($getUser){
-            $query->whereNull('jurusan_id')
-                ->orWhere('jurusan_id', '=', $getUser->jurusan_id);
-        })
-        ->orderBy('waktu_mulai', 'asc')
-        ->get();
+        // $getSoal = DB::table(function($query) use ($getToday){
+        //     $query->select(DB::raw('id, nama_soal, link, jurusan_id, waktu_mulai'))
+        //         ->from('soal')
+        //         ->where('waktu_mulai', 'LIKE', $getToday.'%');
+        // })->where(function($query) use ($getUser){
+        //     $query->whereNull('jurusan_id')
+        //         ->orWhere('jurusan_id', '=', $getUser->jurusan_id);
+        // })
+        // ->orderBy('waktu_mulai', 'asc')
+        // ->get();
 
-        return response()->json([
-            "code"  => 200,
-            "data"  => $getSoal
-        ], 200);
+        // return response()->json([
+        //     "code"  => 200,
+        //     "data"  => $getSoal
+        // ], 200);
     }
 
-    public function getSoalJoinJurusan(){
+    public function getSoalJoinJurusanTingkat(){
         $getSoal = Soal::leftJoin('jurusan', 'soal.jurusan_id', 'jurusan.id')
-            ->select(DB::raw('soal.id, soal.nama_soal, soal.link, soal.waktu_mulai, jurusan.nama as nama_jurusan'))
+            ->join('tingkat', 'soal.tingkat_id', 'tingkat.id')
+            ->select('soal.id', 'soal.nama_soal', 'soal.link', 'soal.waktu_mulai', 'jurusan.nama_jurusan', 'tingkat.nama_tingkat')
             ->get();
         
         return response()->json([
@@ -43,14 +46,24 @@ class SoalController extends Controller
         ], 200); 
     }
 
+    
+
     public function create(Request $request){
         $rules = [
             "nama_soal"     => "required",
             "link"          => "required",
-            "waktu_mulai"   => "required"
+            "nama_tingkat"  => "required",
+            "waktu_mulai"   => "required",
         ];
 
-        $validator = Validator::make($request->all(), $rules);
+        $messages = [
+            "nama_soal.required"    => "Mohon Isi Nama Soal!",
+            "link.required"         => "Mohon Isi Link Soal!",
+            "nama_tingkat.required" => "Mohon Isi Tingkat",
+            "waktu_mulai.required"  => "Mohon Isi Waktu Mulai!"
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             return response()->json([
@@ -59,8 +72,10 @@ class SoalController extends Controller
             ], 400);
         }
 
+        $tingkat = Tingkat::where('nama_tingkat', $request->nama_tingkat)->first();
+
         if ($request->nama_jurusan != null) {
-            $jurusan = Jurusan::where('nama', $request->nama_jurusan)->first();
+            $jurusan = Jurusan::where('nama_jurusan', $request->nama_jurusan)->first();
             $jurusan_id = $jurusan->id;
         } else {
             $jurusan_id = null;
@@ -69,6 +84,7 @@ class SoalController extends Controller
         $soal = new Soal();
         $soal->nama_soal = $request->nama_soal;
         $soal->jurusan_id = $jurusan_id;
+        $soal->tingkat_id = $tingkat->id;
         $soal->link = $request->link;
         $soal->waktu_mulai = $request->waktu_mulai;
         $soal->save();
@@ -84,11 +100,20 @@ class SoalController extends Controller
         $rules = [
             "id"            => "required",
             "nama_soal"     => "required",
+            "nama_tingkat"  => "required",
             "link"          => "required",
             "waktu_mulai"   => "required"
         ];
 
-        $validator = Validator::make($request->all(), $rules);
+        $messages = [
+            "nama_soal.required"    => "Mohon Isi Nama Soal!",
+            "nama_tingkat.required" => "Mohon Isi Tingkat Soal!",
+            "link.required"         => "Mohon Isi Link Soal!",
+            "waktu_mulai.required"  => "Mohon Isi Waktu Mulai!"
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
 
         if ($validator->fails()) {
             return response()->json([
@@ -97,8 +122,10 @@ class SoalController extends Controller
             ], 400);
         }
 
+        $tingkat = Tingkat::where('nama_tingkat', $request->nama_tingkat)->first();
+
         if ($request->nama_jurusan != null) {
-            $jurusan = Jurusan::where('nama', $request->nama_jurusan)->first();
+            $jurusan = Jurusan::where('nama_jurusan', $request->nama_jurusan)->first();
             $jurusan_id = $jurusan->id;
         } else {
             $jurusan_id = null;
@@ -108,6 +135,7 @@ class SoalController extends Controller
         $soal = Soal::find($request->id);
         $soal->nama_soal = $request->nama_soal;
         $soal->jurusan_id = $jurusan_id;
+        $soal->tingkat_id = $tingkat->id;
         $soal->link = $request->link;
         $soal->waktu_mulai = $request->waktu_mulai;
         $soal->save();
