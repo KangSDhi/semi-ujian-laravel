@@ -15,52 +15,52 @@ class JurusanSeeder extends Seeder
     {
         $data = array(
             array(
-                'nama'  => 'Teknik Konstruksi dan Properti',
+                'nama_jurusan'  => 'Teknik Konstruksi dan Properti',
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s"),
             ),
             array(
-                'nama'  => 'Desain Pemodelan dan Informasi Bangunan',
+                'nama_jurusan'  => 'Desain Pemodelan dan Informasi Bangunan',
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s"),
             ),
             array(
-                'nama'  => 'Kimia Industri',
+                'nama_jurusan'  => 'Kimia Industri',
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s"),
             ),
             array(
-                'nama'  => 'Teknik Geomatika',
+                'nama_jurusan'  => 'Teknik Geomatika',
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s"),
             ),
             array(
-                'nama'  => 'Teknik Installasi Tenaga Listrik',
+                'nama_jurusan'  => 'Teknik Installasi Tenaga Listrik',
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s"),
             ),
             array(
-                'nama'  => 'Teknik Komputer dan Jaringan',
+                'nama_jurusan'  => 'Teknik Komputer dan Jaringan',
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s"),
             ),
             array(
-                'nama'  => 'Teknik Mekatronika',
+                'nama_jurusan'  => 'Teknik Mekatronika',
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s"),
             ),
             array(
-                'nama'  => 'Teknik Kendaraan Ringan Otomotif',
+                'nama_jurusan'  => 'Teknik Kendaraan Ringan Otomotif',
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s"),
             ),
             array(
-                'nama'  => 'Teknik Pengelasan',
+                'nama_jurusan'  => 'Teknik Pengelasan',
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s"),
             ),
             array(
-                'nama'  => 'Teknik Elektronika Industri',
+                'nama_jurusan'  => 'Teknik Elektronika Industri',
                 'created_at'    => date("Y-m-d H:i:s"),
                 'updated_at'    => date("Y-m-d H:i:s"),
             ),
