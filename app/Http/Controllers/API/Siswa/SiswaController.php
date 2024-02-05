@@ -15,7 +15,7 @@ class SiswaController extends Controller
 {
     public function index(){
 
-        $siswa = Cache::remember('siswa', now()->addMinutes(150), function(){
+        $siswa = Cache::remember('siswa', now()->addMinutes(15), function(){
             $dataSiswa = User::join('kelas', 'users.kelas_id', 'kelas.id')
                 ->select(DB::raw('users.id, 
                     users.NISN as nisn, 
@@ -29,9 +29,7 @@ class SiswaController extends Controller
             
             return $dataSiswa;
         });
-        
-        // dd($siswa);
-
+    
         return response()->json([
             "code"  => 200,
             "data"  => $siswa
@@ -76,6 +74,8 @@ class SiswaController extends Controller
         $siswa->kelas_id = $kelas->id;
         $siswa->role_id = 2;
         $siswa->save();
+
+        Cache::forget('siswa');
 
         return response()->json([
             "code"  => 201,
@@ -131,6 +131,8 @@ class SiswaController extends Controller
         try {
             DB::table('users')->insert($dataStore);
             DB::commit();
+
+            Cache::forget('siswa');
 
             return response()->json([
                 "code"  => 201
@@ -189,6 +191,8 @@ class SiswaController extends Controller
         $siswa->password_dec = $request->password;
         $siswa->save();
 
+        Cache::forget('siswa');
+
         return response()->json([
             "code"  => 201,
             "message"   => "Berhasil Mengubah Data"
@@ -197,6 +201,8 @@ class SiswaController extends Controller
 
     public function destroy($id){
         User::where('id', $id)->delete();
+
+        Cache::forget('siswa');
 
         return response()->json([
             "code"  => 200,

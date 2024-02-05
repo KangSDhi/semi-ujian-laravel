@@ -9,6 +9,7 @@ use App\Models\Soal;
 use App\Models\Jurusan;
 use App\Models\Tingkat;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
 
 class SoalController extends Controller
 {
@@ -36,14 +37,19 @@ class SoalController extends Controller
     }
 
     public function getSoalJoinJurusanTingkat(){
-        $getSoal = Soal::leftJoin('jurusan', 'soal.jurusan_id', 'jurusan.id')
-            ->join('tingkat', 'soal.tingkat_id', 'tingkat.id')
-            ->select('soal.id', 'soal.nama_soal', 'soal.link', 'soal.waktu_mulai', 'jurusan.nama_jurusan', 'tingkat.nama_tingkat')
-            ->get();
-        
+
+        $soal = Cache::remember('soal', now()->addMinutes(15), function(){
+            $dataSoal = Soal::leftJoin('jurusan', 'soal.jurusan_id', 'jurusan.id')
+                ->join('tingkat', 'soal.tingkat_id', 'tingkat.id')
+                ->select('soal.id', 'soal.nama_soal', 'soal.link', 'soal.waktu_mulai', 'jurusan.nama_jurusan', 'tingkat.nama_tingkat')
+                ->get();
+            
+            return $dataSoal;
+        });
+
         return response()->json([
             "code"  => 200,
-            "data"  => $getSoal
+            "data"  => $soal
         ], 200); 
     }
 
@@ -89,6 +95,8 @@ class SoalController extends Controller
         $soal->link = $request->link;
         $soal->waktu_mulai = $request->waktu_mulai;
         $soal->save();
+
+        Cache::forget('soal');
 
         return response()->json([
             "code"  => 201,
@@ -141,6 +149,8 @@ class SoalController extends Controller
         $soal->waktu_mulai = $request->waktu_mulai;
         $soal->save();
 
+        Cache::forget('soal');
+
         return response()->json([
             "code"  => 201,
             "message"   => "Berhasil Mengubah Data"
@@ -149,6 +159,8 @@ class SoalController extends Controller
 
     public function destroy($id){
         Soal::where('id', $id)->delete();
+
+        Cache::forget('soal');
 
         return response()->json([
             "code"  => 200,
