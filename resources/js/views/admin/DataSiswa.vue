@@ -326,8 +326,9 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.kelasErrorMessage }">
                                 <template v-for="(item, index) in dataKelas" :key="index">
-                                    <option :value="item.nama_kelas" :selected="item.nama_kelas === dataUpdate.nama_kelas">{{
-                                        item.nama_kelas }}</option>
+                                    <option :value="item.nama_kelas" :selected="item.nama_kelas === dataUpdate.nama_kelas">
+                                        {{
+                                            item.nama_kelas }}</option>
                                 </template>
                             </select>
                             <span class="text-red-500 text-sm font-bold">{{ updateError.kelasErrorMessage }}</span>
@@ -845,11 +846,50 @@ export default {
                 });
         },
         exportXLSX() {
-            const ws = utils.json_to_sheet(this.data);
+            const data = JSON.parse(JSON.stringify(this.data));
+            this.removeColumn(data, "id");
+            this.changeColumnTitle(data, "nisn", "NISN");
+            this.changeColumnTitle(data, "nama_siswa", "Nama Siswa");
+            this.changeColumnTitle(data, "nama_kelas", "Kelas");
+            this.changeColumnTitle(data, "password_dec", "Password");
+            let columnWidths = this.autoSizeColumns(data);
+            console.log(columnWidths['Kelas']);
+            let wscols = [
+                {wch:columnWidths['NISN']},
+                {wch:columnWidths['Nama Siswa']},
+                {wch:columnWidths['Kelas']},
+                {wch:columnWidths['Password']},
+            ];
+            const ws = utils.json_to_sheet(data);
+            ws['!cols'] = wscols;
             const wb = utils.book_new();
             utils.book_append_sheet(wb, ws, "Data");
             writeFileXLSX(wb, "DataSiswa.xlsx");
+        },
+        removeColumn(jsonData, columnName) {
+            jsonData.forEach(function (row) {
+                delete row[columnName];
+            });
+        },
+        changeColumnTitle(jsonData, oldTitle, newTitle) {
+            jsonData.forEach(function (row) {
+                row[newTitle] = row[oldTitle];
+                delete row[oldTitle];
+            })
+        },
+        autoSizeColumns(jsonData) {
+            let wscols = [];
+            jsonData.forEach(function (row) {
+                Object.keys(row).forEach(function (key) {
+                    var width = (row[key].toString().length + 2) * 1.2; // Adjust as needed
+                    if (!wscols[key] || wscols[key] < width) {
+                        wscols[key] = width;
+                    }
+                });
+            });
+            return wscols;
         }
+
     }
 }
 </script>
