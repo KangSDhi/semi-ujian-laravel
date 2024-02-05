@@ -9,21 +9,29 @@ use App\Models\Jurusan;
 use App\Models\Kelas;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
 
 class SiswaController extends Controller
 {
     public function index(){
-        $siswa = User::join('kelas', 'users.kelas_id', 'kelas.id')
-            ->select(DB::raw('users.id, 
-            users.NISN as nisn, 
-            users.name as nama_siswa,
-            nama_kelas,
-            users.password_dec'))
-            ->where('role_id', 2)
-            ->orderBy('kelas.nama_kelas', 'asc')
-            ->orderBy('users.name', 'asc')
-            ->get();
+
+        $siswa = Cache::remember('siswa', now()->addMinutes(150), function(){
+            $dataSiswa = User::join('kelas', 'users.kelas_id', 'kelas.id')
+                ->select(DB::raw('users.id, 
+                    users.NISN as nisn, 
+                    users.name as nama_siswa,
+                    nama_kelas,
+                    users.password_dec'))
+                ->where('role_id', 2)
+                ->orderBy('kelas.nama_kelas', 'asc')
+                ->orderBy('users.name', 'asc')
+                ->get();
+            
+            return $dataSiswa;
+        });
         
+        // dd($siswa);
+
         return response()->json([
             "code"  => 200,
             "data"  => $siswa

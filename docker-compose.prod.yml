@@ -31,6 +31,21 @@ services:
     networks:
       - manajemen-ujian-laravel-net
   
+  cache:
+    image: redis:6.2-alpine
+    container_name: manajemen-ujian-laravel-cache
+    ports:
+      - 6379:6379
+    command: redis-server --save 20 1 --loglevel warning --requirepass XSuUzaai3ba/b17MIE9o97Z8ModP3YX6VCtt2TG2OEQHcoBhnvs7vZu+qE97SL259jM044zxUJKe2o8Hwww@694225724d66
+    volumes:
+      - manajemen-ujian-laravel-cache:/data
+    networks:
+      - manajemen-ujian-laravel-net
+
+volumes:
+  manajemen-ujian-laravel-cache:
+    driver: local
+  
 networks:
   manajemen-ujian-laravel-net:
     driver: bridge
