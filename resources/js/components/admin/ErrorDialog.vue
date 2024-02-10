@@ -3,7 +3,7 @@
         <div class="bg-white px-16 py-14 rounded-md">
             <h1 class="text-2xl mb-4 font-bold text-red-500">Error!</h1>
             <div class="flex flex-col">
-                <template v-for="(item, index) in uploadError">
+                <template v-for="(item, index) in errorMessages">
                     <span class="text-red-500 text-xl font-semibold">{{ '* ' + item }}</span>
                 </template>
             </div>
@@ -19,7 +19,7 @@
 export default {
     name: "ErrorDialog",
     props: {
-        uploadError: {
+        errorMessages: {
             type: Array
         }
     },
