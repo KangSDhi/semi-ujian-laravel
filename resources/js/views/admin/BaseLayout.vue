@@ -150,7 +150,6 @@ export default {
                 }
             })
                 .then(({ data }) => {
-                    console.log(data);
                     this.nama_user = data.data.nama_user;
                     if (data.data.role_id != 1) {
                         localStorage.removeItem("auth_token");

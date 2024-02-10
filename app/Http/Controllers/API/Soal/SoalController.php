@@ -42,6 +42,8 @@ class SoalController extends Controller
             $dataSoal = Soal::leftJoin('jurusan', 'soal.jurusan_id', 'jurusan.id')
                 ->join('tingkat', 'soal.tingkat_id', 'tingkat.id')
                 ->select('soal.id', 'soal.nama_soal', 'soal.link', 'soal.waktu_mulai', 'jurusan.nama_jurusan', 'tingkat.nama_tingkat')
+                ->orderBy('tingkat.nama_tingkat', 'asc')
+                ->orderBy('jurusan.nama_jurusan', 'asc')
                 ->get();
             
             return $dataSoal;
