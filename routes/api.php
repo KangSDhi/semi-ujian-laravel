@@ -10,6 +10,7 @@ use App\Http\Controllers\API\Siswa\SiswaController as Siswa;
 use App\Http\Controllers\API\Jurusan\JurusanController as Jurusan;
 use App\Http\Controllers\API\Tingkat\TingkatController as Tingkat;
 use App\Http\Controllers\API\Kelas\KelasController as Kelas;
+use App\Http\Controllers\API\Chart\SiswaChartController as SiswaChart;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,5 +54,6 @@ Route::middleware(['auth:jwt', 'cekrole.admin'])->prefix('admin')->group(functio
     Route::get('/jurusan', [Jurusan::class, 'index']);
     Route::get('/tingkat', [Tingkat::class, 'index']);
     Route::get('/kelas', [Kelas::class, 'index']);
+    Route::get('/chart/siswa/total/tingkat/jurusan', [SiswaChart::class, 'chartSiswaTotalTingkatJurusan']);
     Route::get('/logout', [Auth::class, 'logout']);
 });
