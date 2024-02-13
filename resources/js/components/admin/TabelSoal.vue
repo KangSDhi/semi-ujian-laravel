@@ -54,6 +54,9 @@
                     <th scope="col" class="px-6 py-3">
                         Waktu Mulai
                     </th>
+                    <th scope="col" class="px-6 py-3">
+                        Waktu Selesai
+                    </th>
                     <th scope="col" class="px-6 py-3 text-end">
                         Aksi
                     </th>
@@ -88,6 +91,9 @@
                         </td>
                         <td class="px-6 py-4">
                             {{ item.waktu_mulai }}
+                        </td>
+                        <td class="px-6 py-4">
+                            {{ item.waktu_selesai }}
                         </td>
                         <td class="px-6 py-4 space-x-2 text-right">
                             <a :href="item.link" target="_blank"

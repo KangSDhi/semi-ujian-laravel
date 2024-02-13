@@ -50,6 +50,13 @@
                         :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.waktuMulaiErrorMessage }">
                     <span class="text-red-500 text-sm font-bold">{{ updateError.waktuMulaiErrorMessage }}</span>
                 </div>
+                <div>
+                    <label for="input-waktu-selesai-update" class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Waktu Selesai</label>
+                    <input id="input-waktu-selesai-update" v-model="dataUpdate.waktu_selesai" type="datetime-local"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.waktuSelesaiErrorMessage }">
+                    <span class="text-red-500 text-sm font-bold">{{ updateError.waktuSelesaiErrorMessage }}</span>
+                </div>
             </div>
             <div class="flex mt-3 justify-end gap-2">
                 <button @click="updateSoal"
@@ -100,7 +107,8 @@ export default {
                 namaJurusanErrorMessage: '',
                 namaTingkatErrorMessage: '',
                 linkErrorMessage: '',
-                waktuMulaiErrorMessage: ''
+                waktuMulaiErrorMessage: '',
+                waktuSelesaiErrorMessage: ''
             }
         }
     },
@@ -112,7 +120,8 @@ export default {
                 link: this.dataUpdate.link,
                 nama_jurusan: this.dataUpdate.nama_jurusan,
                 nama_tingkat: this.dataUpdate.nama_tingkat,
-                waktu_mulai: this.dataUpdate.waktu_mulai
+                waktu_mulai: this.dataUpdate.waktu_mulai,
+                waktu_selesai: this.dataUpdate.waktu_selesai,
             }, {
                 headers: {
                     "Authorization": "Bearer " + this.token
@@ -127,6 +136,7 @@ export default {
                     this.updateError.namaJurusanErrorMessage = '';
                     this.updateError.namaTingkatErrorMessage = '';
                     this.updateError.waktuMulaiErrorMessage = '';
+                    this.updateError.waktuSelesaiErrorMessage = '';
 
                     const errorMessages = response.data.error_message;
                     if (this.isObject(errorMessages)) {
@@ -145,6 +155,9 @@ export default {
                             }
                             if (key == "waktu_mulai") {
                                 this.updateError.waktuMulaiErrorMessage = errorMessages[key][0];
+                            }
+                            if (key == "waktu_selesai") {
+                                this.updateError.waktuSelesaiErrorMessage = errorMessages[key][0];
                             }
                         })
                     }
