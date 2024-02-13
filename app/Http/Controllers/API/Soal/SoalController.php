@@ -10,6 +10,7 @@ use App\Models\Jurusan;
 use App\Models\Tingkat;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
+use App\Rules\WaktuSelesaiRule;
 
 class SoalController extends Controller
 {
@@ -41,7 +42,7 @@ class SoalController extends Controller
         $soal = Cache::remember('soal', now()->addMinutes(15), function(){
             $dataSoal = Soal::leftJoin('jurusan', 'soal.jurusan_id', 'jurusan.id')
                 ->join('tingkat', 'soal.tingkat_id', 'tingkat.id')
-                ->select('soal.id', 'soal.nama_soal', 'soal.link', 'soal.waktu_mulai', 'jurusan.nama_jurusan', 'tingkat.nama_tingkat')
+                ->select('soal.id', 'soal.nama_soal', 'soal.link', 'soal.waktu_mulai', 'soal.waktu_selesai', 'jurusan.nama_jurusan', 'tingkat.nama_tingkat')
                 ->orderBy('tingkat.nama_tingkat', 'asc')
                 ->orderBy('jurusan.nama_jurusan', 'asc')
                 ->get();
@@ -58,18 +59,21 @@ class SoalController extends Controller
     
 
     public function create(Request $request){
+        // dd(strtotime($request->waktu_selesai));
         $rules = [
             "nama_soal"     => "required",
             "link"          => "required",
             "nama_tingkat"  => "required",
-            "waktu_mulai"   => "required",
+            "waktu_mulai"   => "required|date",
+            "waktu_selesai"  => ['required', 'date', new WaktuSelesaiRule()],
         ];
 
         $messages = [
             "nama_soal.required"    => "Mohon Isi Nama Soal!",
             "link.required"         => "Mohon Isi Link Soal!",
             "nama_tingkat.required" => "Mohon Isi Tingkat",
-            "waktu_mulai.required"  => "Mohon Isi Waktu Mulai!"
+            "waktu_mulai.required"  => "Mohon Isi Waktu Mulai!",
+            "waktu_selesai.required"  => "Mohon Isi Waktu Selesai!",
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -96,6 +100,7 @@ class SoalController extends Controller
         $soal->tingkat_id = $tingkat->id;
         $soal->link = $request->link;
         $soal->waktu_mulai = $request->waktu_mulai;
+        $soal->waktu_selesai = $request->waktu_selesai;
         $soal->save();
 
         Cache::forget('soal');
@@ -113,14 +118,16 @@ class SoalController extends Controller
             "nama_soal"     => "required",
             "nama_tingkat"  => "required",
             "link"          => "required",
-            "waktu_mulai"   => "required"
+            "waktu_mulai"   => "required",
+            "waktu_selesai" => ['required', 'date', new WaktuSelesaiRule()],
         ];
 
         $messages = [
             "nama_soal.required"    => "Mohon Isi Nama Soal!",
             "nama_tingkat.required" => "Mohon Isi Tingkat Soal!",
             "link.required"         => "Mohon Isi Link Soal!",
-            "waktu_mulai.required"  => "Mohon Isi Waktu Mulai!"
+            "waktu_mulai.required"  => "Mohon Isi Waktu Mulai!",
+            "waktu_selesai.required"  => "Mohon Isi Waktu Selesai!",
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -149,6 +156,7 @@ class SoalController extends Controller
         $soal->tingkat_id = $tingkat->id;
         $soal->link = $request->link;
         $soal->waktu_mulai = $request->waktu_mulai;
+        $soal->waktu_selesai = $request->waktu_selesai;
         $soal->save();
 
         Cache::forget('soal');

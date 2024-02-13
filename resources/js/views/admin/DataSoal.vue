@@ -12,7 +12,7 @@
                 :data-delete="dataDelete"
                 @isDeleteDialogSoalFalse="deleteDialogSoalClose($event)"
             />
-            <FormUpdateSoal v-show="isFormEditSoal"
+            <FormEditSoal v-show="isFormEditSoal"
                 :token="token"
                 :data-update="dataUpdate"
                 :data-jurusan="dataJurusan"
@@ -32,7 +32,7 @@
 <script>
 import BaseLayout from './BaseLayout.vue';
 import FormCreateSoal from '../../components/admin/FormCreateSoal.vue';
-import FormUpdateSoal from '../../components/admin/FormUpdateSoal.vue';
+import FormEditSoal from '../../components/admin/FormEditSoal.vue';
 import DeleteDialogSoal from '../../components/admin/DeleteDialogSoal.vue';
 import TabelSoal from '../../components/admin/TabelSoal.vue';
 import axios from 'axios';
@@ -55,7 +55,7 @@ export default {
         BaseLayout,
         TabelSoal,
         FormCreateSoal,
-        FormUpdateSoal,
+        FormEditSoal,
         DeleteDialogSoal,
     },
     mounted() {
