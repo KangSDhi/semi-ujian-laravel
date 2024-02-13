@@ -57,6 +57,7 @@ export default {
             })
                 .then(({ data }) => {
                     this.soal = data.data;
+                    console.log(this.soal);
                 })
                 .catch(({ response }) => {
                     console.error(response);

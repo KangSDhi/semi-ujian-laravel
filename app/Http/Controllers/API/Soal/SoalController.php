@@ -19,7 +19,7 @@ class SoalController extends Controller
         $getToday = date("Y-m-d");
 
         $getSoal = DB::table(function($query) use ($getToday){
-            $query->select(DB::raw('id, nama_soal, link, jurusan_id, tingkat_id, waktu_mulai'))
+            $query->select(DB::raw('id, nama_soal, link, jurusan_id, tingkat_id, waktu_mulai, waktu_selesai'))
                 ->from('soal')
                 ->where('waktu_mulai', 'LIKE', $getToday.'%');
         })->where(function($query) use ($getUser){
