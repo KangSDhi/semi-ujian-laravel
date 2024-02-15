@@ -35,7 +35,6 @@
                     <select id="select-tingkat-update" v-model="dataUpdate.nama_tingkat"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         :class="{ 'border-2 border-red-400 dark:border-2 dark:border-red-500': updateError.namaTingkatErrorMessage }">
-                        <option :value="null" :selected="dataUpdate.nama_tingkat === null">Semua</option>
                         <template v-for="(item, index) in dataTingkat" :key="index">
                             <option :value="item.nama_tingkat" :selected="item.nama_tingkat === dataUpdate.nama_tingkat">{{
                                 item.nama_tingkat }}</option>
@@ -114,6 +113,7 @@ export default {
     },
     methods: {
         updateSoal() {
+            this.loadingDialogOpen();
             axios.put("/api/admin/soal/update", {
                 id: this.dataUpdate.id,
                 nama_soal: this.dataUpdate.nama_soal,
@@ -128,9 +128,11 @@ export default {
                 }
             })
                 .then(({ data }) => {
+                    this.loadingDialogClose();
                     this.$router.go();
                 })
                 .catch(({ response }) => {
+                    this.loadingDialogClose();
                     this.updateError.namaSoalErrorMessage = '';
                     this.updateError.linkErrorMessage = '';
                     this.updateError.namaJurusanErrorMessage = '';
@@ -170,7 +172,13 @@ export default {
         },
         formEditSoalClose(){
             this.$emit('isFormEditSoalFalse', false);
-        }
+        },
+        loadingDialogOpen(){
+            this.$emit('isLoadingTrue', true);
+        },
+        loadingDialogClose(){
+            this.$emit('isLoadingFalse', false);
+        },
     }
 }
 </script>
