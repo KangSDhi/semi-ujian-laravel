@@ -28,21 +28,30 @@ export default {
     },
     methods: {
         deleteSoal() {
-            axios.get("/api/admin/soal/delete/" + this.dataDelete.id, {
+            this.loadingDialogOpen();
+            axios.delete("/api/admin/soal/delete/" + this.dataDelete.id, {
                 headers: {
                     "Authorization": "Bearer " + this.token
                 }
             })
                 .then((data) => {
+                    this.loadingDialogClose();
                     this.$router.go();
                 })
                 .catch((error) => {
+                    this.loadingDialogClose();
                     console.error(error);
                 });
         },
         deleteDialogSoalClose(){
             this.$emit('isDeleteDialogSoalFalse', false);
-        }
+        },
+        loadingDialogOpen(){
+            this.$emit('isLoadingTrue', true);
+        },
+        loadingDialogClose(){
+            this.$emit('isLoadingFalse', false);
+        },
     }
 }
 </script>

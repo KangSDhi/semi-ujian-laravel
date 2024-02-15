@@ -118,7 +118,7 @@ export default {
     },
     methods: {
         createSoal() {
-            console.log(this.token);
+            this.loadingDialogOpen();
             axios.post("/api/admin/soal/create", {
                 nama_soal: this.dataCreate.nama_soal,
                 link: this.dataCreate.link,
@@ -132,9 +132,11 @@ export default {
                 }
             })
                 .then(({ data }) => {
+                    this.loadingDialogClose();
                     this.$router.go();
                 })
                 .catch(({ response }) => {
+                    this.loadingDialogClose();
                     this.createError.namaSoalErrorMessage = '';
                     this.createError.linkErrorMessage = '';
                     this.createError.namaJurusanErrorMessage = '';
@@ -174,7 +176,13 @@ export default {
         },
         formCreateSoalClose() {
             this.$emit('isFormCreateSoalFalse', false);
-        }
+        },
+        loadingDialogOpen(){
+            this.$emit('isLoadingTrue', true);
+        },
+        loadingDialogClose(){
+            this.$emit('isLoadingFalse', false);
+        },
     }
 }
 </script>

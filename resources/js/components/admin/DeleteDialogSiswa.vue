@@ -28,22 +28,30 @@ export default {
     },
     methods: {
         deleteSiswa() {
-            axios.get("/api/admin/siswa/delete/" + this.dataDelete.id, {
+            this.loadingDialogOpen();
+            axios.delete("/api/admin/siswa/delete/" + this.dataDelete.id, {
                 headers: {
                     "Authorization": "Bearer " + this.token
                 }
             })
                 .then((data) => {
-                    console.log(data);
+                    this.loadingDialogClose();
                     this.$router.go();
                 })
                 .catch((error) => {
+                    this.loadingDialogClose();
                     console.error(error);
                 });
         },
         deleteDialogSiswaClose(){
             this.$emit('isDeleteDialogSiswaFalse', false);
-        }
+        },
+        loadingDialogOpen(){
+            this.$emit('isLoadingTrue', true);
+        },
+        loadingDialogClose(){
+            this.$emit('isLoadingFalse', false);
+        },
     }
 }
 </script>

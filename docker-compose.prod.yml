@@ -15,7 +15,7 @@ services:
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     
     networks:
-      - manajemen-ujian-laravel-net
+      - manajemen-ujian-laravel-net-prod
 
   webserver:
     image: nginx:1.25.3
@@ -29,7 +29,7 @@ services:
       - ./docker/nginx/conf.d/nginx.conf:/etc/nginx/nginx.conf
 
     networks:
-      - manajemen-ujian-laravel-net
+      - manajemen-ujian-laravel-net-prod
   
   cache:
     image: redis:6.2-alpine
@@ -38,14 +38,14 @@ services:
       - 6379:6379
     command: redis-server --save 20 1 --loglevel warning --requirepass XSuUzaai3ba/b17MIE9o97Z8ModP3YX6VCtt2TG2OEQHcoBhnvs7vZu+qE97SL259jM044zxUJKe2o8Hwww@694225724d66
     volumes:
-      - manajemen-ujian-laravel-cache:/data
+      - manajemen-ujian-laravel-cache-prod:/data
     networks:
-      - manajemen-ujian-laravel-net
+      - manajemen-ujian-laravel-net-prod
     
 volumes:
-  manajemen-ujian-laravel-cache:
+  manajemen-ujian-laravel-cache-prod:
     driver: local
 
 networks:
-  manajemen-ujian-laravel-net:
+  manajemen-ujian-laravel-net-prod:
     driver: bridge

@@ -92,7 +92,7 @@ export default {
         uploadSiswa() {
             this.formUploadSiswaClose();
 
-            const fetchData = async () => {
+            const postData = async () => {
                 const promise = axios.post("/api/admin/siswa/create/batch", {
                     data: this.dataUploadSiswa
                 }, {
@@ -105,11 +105,10 @@ export default {
                 this.loadingDialogOpen();
 
                 try {
-                    const response = await promise;
+                    await promise;
                     // this.isLoading = false
                     this.loadingDialogClose();
                     this.$router.go();
-                    console.log(response.data);
                 } catch ({ response }) {
                     // this.isLoading = false;
                     this.loadingDialogClose();
@@ -121,7 +120,7 @@ export default {
                 }
             };
 
-            fetchData();
+            postData();
         },
         formUploadSiswaClose(){
             this.$emit('isFormUploadSiswaFalse', false);

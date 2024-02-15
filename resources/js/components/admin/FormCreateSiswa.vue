@@ -103,28 +103,33 @@ export default {
     },
     methods: {
         createSiswa() {
-            axios.post("/api/admin/siswa/create", {
-                nama_siswa: this.dataCreate.nama_siswa,
-                nisn: this.dataCreate.nisn,
-                password: this.dataCreate.password,
-                password_konfirmasi: this.dataCreate.password_konfirmasi,
-                nama_kelas: this.dataCreate.nama_kelas
-            }, {
-                headers: {
-                    "Authorization": "Bearer " + this.token
-                }
-            })
-                .then(({ data }) => {
-                    console.log(data);
+
+            const fetchData = async () => {
+                const promise = axios.post("/api/admin/siswa/create", {
+                    nama_siswa: this.dataCreate.nama_siswa,
+                    nisn: this.dataCreate.nisn,
+                    password: this.dataCreate.password,
+                    password_konfirmasi: this.dataCreate.password_konfirmasi,
+                    nama_kelas: this.dataCreate.nama_kelas
+                }, {
+                    headers: {
+                        "Authorization": "Bearer " + this.token
+                    }
+                });
+
+                this.loadingDialogOpen();
+
+                try {
+                    await promise;
+                    this.loadingDialogClose();
                     this.$router.go();
-                })
-                .catch(({ response }) => {
+                } catch ({ response }) {
+                    this.loadingDialogClose();
                     this.createError.nisnErrorMessage = '';
                     this.createError.namaSiswaErrorMessage = '';
                     this.createError.kelasErrorMessage = '';
                     this.createError.passwordErrorMessage = '';
                     this.createError.passwordKonfirmasiErrorMessage = '';
-                    console.error(response);
                     const errorMessages = response.data.error_message;
                     if (this.isObject(errorMessages)) {
                         Object.keys(errorMessages).forEach((key) => {
@@ -145,15 +150,24 @@ export default {
                             }
                         })
                     }
-                });
+                }
+            };
+
+            fetchData();
         },
         isObject(value) {
             return (
                 typeof value === 'object' && value !== null && !Array.isArray(value)
             );
         },
-        formCreateSiswaClose(){
+        formCreateSiswaClose() {
             this.$emit('isFormCreateSiswaFalse', false);
+        },
+        loadingDialogOpen() {
+            this.$emit('isLoadingTrue', true);
+        },
+        loadingDialogClose() {
+            this.$emit('isLoadingFalse', false);
         }
     }
 }

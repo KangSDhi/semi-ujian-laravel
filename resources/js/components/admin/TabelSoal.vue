@@ -66,7 +66,7 @@
                 <template v-if="items.length == 0">
                     <tr
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th class="text-xl text-center py-2.5" colspan="6">Data Kosong</th>
+                        <th class="text-xl text-center py-2.5" colspan="7">Data Kosong</th>
                     </tr>
                 </template>
                 <template v-for="(item, index) in items" :key="index">

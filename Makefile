@@ -1,13 +1,25 @@
 SHELL = /bin/bash
 
-up:
+dev-up:
 	docker compose up -d
 
-down:
+dev-down:
 	docker compose down
 
-shutdown:
+dev-shutdown:
 	docker compose down -v
 
-app-bash:
+dev-app-bash:
 	docker compose exec app bash
+
+prod-up:
+	docker compose -f docker-compose.prod.yml up -d
+
+prod-down:
+	docker compose -f docker-compose.prod.yml down
+
+prod-shutdown:
+	docker compose -f docker-compose.prod.yml down -v
+
+prod-app-bash:
+	docker compose -f docker-compose.prod.yml exec app bash

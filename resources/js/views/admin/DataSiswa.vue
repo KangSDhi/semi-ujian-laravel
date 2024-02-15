@@ -11,17 +11,23 @@
                 :token="token"
                 :data-kelas="dataKelas"
                 @isFormCreateSiswaFalse="formCreateSiswaToggle($event)"
+                @isLoadingTrue="loadingToggle($event)"
+                @isLoadingFalse="loadingToggle($event)"
             />
             <FormEditSiswa v-show="isFormEditSiswa"
                 :token="token"
                 :data-update="dataUpdate"
                 :data-kelas="dataKelas"
                 @isFormEditSiswaFalse="formEditSiswaClose($event)"
+                @isLoadingTrue="loadingToggle($event)"
+                @isLoadingFalse="loadingToggle($event)"
             />
             <DeleteDialogSiswa v-show="isDeleteDialog"
                 :token="token"
                 :data-delete="dataDelete"
                 @isDeleteDialogSiswaFalse="deleteDialogSiswaClose($event)"
+                @isLoadingTrue="loadingToggle($event)"
+                @isLoadingFalse="loadingToggle($event)"
             />
             <FormUploadSiswa v-show="isFormUploadSiswa"
                 :token="token"
