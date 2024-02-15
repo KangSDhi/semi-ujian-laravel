@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     
-    container_name: manajemen-ujian-laravel-app
+    container_name: manajemen-ujian-laravel-app-dev
     working_dir: /var/www
 
     volumes:
@@ -15,11 +15,11 @@ services:
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     
     networks:
-      - manajemen-ujian-laravel-net
+      - manajemen-ujian-laravel-net-dev
 
   webserver:
     image: nginx:1.25.3
-    container_name: manajemen-ujian-laravel-webserver
+    container_name: manajemen-ujian-laravel-webserver-dev
 
     ports:
       - 8001:80
@@ -29,11 +29,11 @@ services:
       - ./docker/nginx/conf.d/nginx.conf:/etc/nginx/nginx.conf
 
     networks:
-      - manajemen-ujian-laravel-net
+      - manajemen-ujian-laravel-net-dev
   
   db:
     image: mariadb:10.7.8
-    container_name: manajemen-ujian-laravel-db
+    container_name: manajemen-ujian-laravel-db-dev
 
     ports:
       - 3001:3306
@@ -45,30 +45,30 @@ services:
       MARIADB_PASSWORD: ${DB_PASSWORD}
     
     volumes:
-      - manajemen-ujian-laravel-data:/var/lib/mysql
+      - manajemen-ujian-laravel-data-dev:/var/lib/mysql
     
     networks:
-      - manajemen-ujian-laravel-net
+      - manajemen-ujian-laravel-net-dev
   
   cache:
     image: redis:6.2-alpine
-    container_name: manajemen-ujian-laravel-cache
+    container_name: manajemen-ujian-laravel-cache-dev
     ports:
       - 6379:6379
     command: redis-server --save 20 1 --loglevel warning --requirepass XSuUzaai3ba/b17MIE9o97Z8ModP3YX6VCtt2TG2OEQHcoBhnvs7vZu+qE97SL259jM044zxUJKe2o8Hwww@694225724d66
     volumes:
-      - manajemen-ujian-laravel-cache:/data
+      - manajemen-ujian-laravel-cache-dev:/data
     networks:
-      - manajemen-ujian-laravel-net
+      - manajemen-ujian-laravel-net-dev
     
 
 volumes:
-  manajemen-ujian-laravel-data:
+  manajemen-ujian-laravel-data-dev:
     driver: local
-  manajemen-ujian-laravel-cache:
+  manajemen-ujian-laravel-cache-dev:
     driver: local
 
 
 networks:
-  manajemen-ujian-laravel-net:
+  manajemen-ujian-laravel-net-dev:
     driver: bridge

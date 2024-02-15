@@ -87,7 +87,7 @@ export default {
             type: Array
         },
     },
-    data(){
+    data() {
         return {
             updateError: {
                 namaSiswaErrorMessage: '',
@@ -100,24 +100,30 @@ export default {
     },
     methods: {
         updateSiswa() {
-            axios.put("/api/admin/siswa/update", {
-                id: this.dataUpdate.id,
-                nisn: this.dataUpdate.nisn,
-                nama_siswa: this.dataUpdate.nama_siswa,
-                nama_kelas: this.dataUpdate.nama_kelas,
-                password: this.dataUpdate.password_dec,
-                konfirmasi_password: this.dataUpdate.password_konfirmasi,
-                _method: "put"
-            }, {
-                headers: {
-                    "Authorization": "Bearer " + this.token
-                }
-            })
-                .then(({ data }) => {
-                    console.log(data);
+
+            const putData = async () => {
+                const promise = axios.put("/api/admin/siswa/update", {
+                    id: this.dataUpdate.id,
+                    nisn: this.dataUpdate.nisn,
+                    nama_siswa: this.dataUpdate.nama_siswa,
+                    nama_kelas: this.dataUpdate.nama_kelas,
+                    password: this.dataUpdate.password_dec,
+                    konfirmasi_password: this.dataUpdate.password_konfirmasi,
+                    _method: "put"
+                }, {
+                    headers: {
+                        "Authorization": "Bearer " + this.token
+                    }
+                });
+
+                this.loadingDialogOpen();
+
+                try {
+                    await promise;
+                    this.loadingDialogClose();
                     this.$router.go();
-                })
-                .catch(({ response }) => {
+                } catch ({ response }) {
+                    this.loadingDialogClose();
                     this.updateError.nisnErrorMessage = '';
                     this.updateError.namaSiswaErrorMessage = '';
                     this.updateError.kelasErrorMessage = '';
@@ -143,17 +149,25 @@ export default {
                             }
                         });
                     }
+                }
+            }
 
-                });
+            putData();
         },
         isObject(value) {
             return (
                 typeof value === 'object' && value !== null && !Array.isArray(value)
             );
         },
-        formEditSiswaClose(){
+        formEditSiswaClose() {
             this.$emit('isFormEditSiswaFalse', false);
-        }
+        },
+        loadingDialogOpen() {
+            this.$emit('isLoadingTrue', true);
+        },
+        loadingDialogClose() {
+            this.$emit('isLoadingFalse', false);
+        },
     }
 }
 </script>

@@ -50,10 +50,10 @@ RUN chown -R www-data:www-data /var/www
 # Run Chmod -R 777
 RUN chmod -R 777 /var/www
 
-# Run Node install
+# Run npm install
 RUN npm install
 
-# Run Node Build
+# Run npm run build
 RUN npm run build
 
 # Change Current User to www

@@ -46,7 +46,7 @@ Route::middleware(['auth:jwt', 'cekrole.admin'])->prefix('admin')->group(functio
     Route::post('/siswa/create', [Siswa::class, 'create']);
     Route::post('/siswa/create/batch', [Siswa::class, 'batchCreate']);
     Route::put('/siswa/update', [Siswa::class, 'update']);
-    Route::get('/siswa/delete/{id}', [Siswa::class, 'destroy']);
+    Route::delete('/siswa/delete/{id}', [Siswa::class, 'destroy']);
     Route::get('/soal', [Soal::class, 'getSoalJoinJurusanTingkat']);
     Route::post('/soal/create', [Soal::class, 'create']);
     Route::put('/soal/update', [Soal::class, 'update']);
