@@ -103,10 +103,12 @@
             </div>
         </div>
     </div>
+    <LoadingComponent v-show="isLoading"/>
 </template>
 
 <script>
 import axios from "axios";
+import LoadingComponent from "../../components/admin/LoadingComponent.vue";
 
 export default {
     data() {
@@ -114,8 +116,12 @@ export default {
             token: localStorage.getItem("auth_token"),
             isSidebarOpen: false,
             isLogoutOpen: false,
+            isLoading: false,
             nama_user: '',
         }
+    },
+    components: {
+        LoadingComponent
     },
     computed: {
         sidebarComputed() {
@@ -130,16 +136,20 @@ export default {
             this.isSidebarOpen = !this.isSidebarOpen
         },
         logout() {
+            this.isLogoutOpen = false;
+            this.isLoading = true;
             axios.get("/api/admin/logout", {
                 headers: {
                     "Authorization": "Bearer " + this.token
                 }
             })
                 .then(({ data }) => {
+                    this.isLoading = false;
                     localStorage.removeItem("auth_token");
                     this.$router.push({ name: "Login Page" })
                 })
                 .catch(({ response }) => {
+                    this.isLoading = false;
                     console.error(response);
                 });
         },
