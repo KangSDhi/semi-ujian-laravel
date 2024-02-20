@@ -45,6 +45,7 @@ class SoalController extends Controller
                 ->select('soal.id', 'soal.nama_soal', 'soal.link', 'soal.waktu_mulai', 'soal.waktu_selesai', 'jurusan.nama_jurusan', 'tingkat.nama_tingkat')
                 ->orderBy('tingkat.nama_tingkat', 'asc')
                 ->orderBy('jurusan.nama_jurusan', 'asc')
+                ->orderBy('soal.waktu_mulai', 'asc')
                 ->get();
             
             return $dataSoal;
