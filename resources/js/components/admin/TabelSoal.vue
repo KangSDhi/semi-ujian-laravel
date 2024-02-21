@@ -90,10 +90,10 @@
                             {{ item.nama_tingkat }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ item.waktu_mulai }}
+                            {{ formatWaktu(item.waktu_mulai) }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ item.waktu_selesai }}
+                            {{ formatWaktu(item.waktu_selesai) }}
                         </td>
                         <td class="px-6 py-4 space-x-2 text-right">
                             <a :href="item.link" target="_blank"
@@ -324,6 +324,23 @@ export default {
             } else {
                 this.items = this.data;
             }
+        },
+        formatWaktu(tanggal){
+            const inputDate = new Date(tanggal);
+
+            let day = inputDate.getDate();
+            let month = inputDate.getMonth() + 1;
+            const year = inputDate.getFullYear();
+            let hours = inputDate.getHours();
+            let minutes = inputDate.getMinutes();
+
+            month = (month < 10 ? '0': '') + month;
+            day = (day < 10 ? '0': '') + day;
+            hours = (hours < 10 ? '0': '') + hours;
+            minutes = (minutes < 10 ? '0' : '') + minutes;
+
+            const formatedDate = day + '-' + month + '-' + year + ' ' + hours + ':' + minutes;
+            return formatedDate;
         },
         formCreateSoalOpen(){
             this.$emit('isFormCreateSoalTrue', true);
