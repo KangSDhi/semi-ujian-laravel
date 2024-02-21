@@ -1,7 +1,7 @@
 <template>
     <div class="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
         <div class="bg-white dark:bg-gray-900 px-16 py-14 rounded-md">
-            <h1 class="text-xl mb-4 font-bold dark:text-slate-200 text-slate-500">Edit Soal</h1>
+            <h1 class="text-xl mb-4 font-bold dark:text-slate-200 text-slate-500">Tambah Soal</h1>
             <div class="grid md:grid-cols-2 gap-1">
                 <div>
                     <label for="input-nama-soal-create" class="block mb-2 text-sm font-medium dark:text-slate-300 text-slate-900">Nama Soal</label>
