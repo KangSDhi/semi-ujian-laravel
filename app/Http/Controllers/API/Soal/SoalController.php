@@ -11,12 +11,13 @@ use App\Models\Tingkat;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
 use App\Rules\WaktuSelesaiRule;
+use Carbon\Carbon;
 
 class SoalController extends Controller
 {
     public function getSoalByUser(){
         $getUser = auth('jwt')->user();
-        $getToday = date("Y-m-d");
+        $getToday = Carbon::now('Asia/Jakarta')->format("Y-m-d");
 
         $getSoal = DB::table(function($query) use ($getToday){
             $query->select(DB::raw('id, nama_soal, link, jurusan_id, tingkat_id, waktu_mulai, waktu_selesai'))
