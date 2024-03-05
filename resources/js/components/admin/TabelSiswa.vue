@@ -55,7 +55,7 @@
                     </th>
                     <th scope="col" class="px-6 py-3">
                         <div class="flex items-center gap-2">
-                            <span>NISN</span>
+                            <span>ID Peserta</span>
                             <div class="flex flex-col">
                                 <svg @click="sort('nisn', 'asc')" fill="none" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="4" viewBox="0 0 24 24" stroke="currentColor" width="12px" height="12px"
