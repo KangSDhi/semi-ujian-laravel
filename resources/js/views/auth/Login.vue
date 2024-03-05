@@ -13,7 +13,7 @@
                     <form class="space-y-6" @submit.prevent="login()">
                         <div>
                             <label class="block text-sm font-medium leading-6 text-gray-900">
-                                Email / NISN
+                                Email / ID Peserta
                             </label>
                             <div class="mt-2">
                                 <input v-model="emailOrNisn" type="text"
