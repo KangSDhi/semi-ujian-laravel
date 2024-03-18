@@ -16,7 +16,7 @@ class AuthController extends Controller
             "emailOrNisn" => "required",
             "password"  => "required"
         ], [
-            "emailOrNisn.required" => "Email Atau NISN Kosong!",
+            "emailOrNisn.required" => "Email Atau ID Peserta Kosong!",
             "password.required" => "Password Kosong!"
         ]);
 
@@ -42,7 +42,7 @@ class AuthController extends Controller
         if (!$token = auth()->guard('jwt')->setTTL(1440)->attempt($credentials)) {
             return response()->json([
                 'code' => 400,
-                'error_message' => 'Email, NISN atau Password Salah!'
+                'error_message' => 'Email, ID Peserta atau Password Salah!'
             ], 400);
         }
 

@@ -15,13 +15,13 @@
             </p>
         </div>
         <div class="px-6 pt-4 pb-2 mb-3">
-            <template v-if="Date.now() >= Date.parse(item.waktu_mulai) && Date.now() <= Date.parse(item.waktu_selesai)">
+            <template v-if="time >= Date.parse(item.waktu_mulai) && time <= Date.parse(item.waktu_selesai)">
                 <a :href="item.link" target="_blank"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                     Mulai
                 </a>
             </template>
-            <template v-else-if="Date.now() >= Date.parse(item.waktu_mulai) && Date.now() >= Date.parse(item.waktu_selesai)">
+            <template v-else-if="time >= Date.parse(item.waktu_mulai) && time >= Date.parse(item.waktu_selesai)">
                 <a href="#" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
                     Sudah Selesai
                 </a>
@@ -41,7 +41,13 @@ export default {
     props: {
         item: {
             type: Object
-        }
+        },
+        time: {
+            type: Number
+        },
+    },
+    mounted(){
+        this.getTimeServer()
     },
     methods: {
         changeFormatDate(dateStr){
@@ -57,6 +63,11 @@ export default {
             const formattedDateStr = day + '-' + month + '-' + year + ' ' + hours + ':' + minutes + ':' + seconds;
 
             return formattedDateStr;
+        },
+        getTimeServer(){
+            console.log("Server");
+            console.log(this.time);
+            console.log();
         }
     }
 }

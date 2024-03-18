@@ -22,7 +22,9 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div v-for="(item, index) in soal">
-                    <KartuSoal :item="item" />
+                    <template v-if="waktuHariIni != 0">
+                        <KartuSoal :item="item" :time="waktuHariIni" />
+                    </template>
                 </div>
             </div>
         </template>
@@ -39,6 +41,7 @@ export default {
         return {
             token: localStorage.getItem("auth_token"),
             soal: [],
+            waktuHariIni: 0
         }
     },
     components: {
@@ -46,7 +49,8 @@ export default {
         KartuSoal,
     },
     mounted() {
-        this.getSoal()
+        this.getSoal(),
+        this.getTimeApi()
     },
     methods: {
         getSoal() {
@@ -58,6 +62,21 @@ export default {
                 .then(({ data }) => {
                     this.soal = data.data;
                     console.log(this.soal);
+                })
+                .catch(({ response }) => {
+                    console.error(response);
+                });
+        },
+        getTimeApi(){
+            axios.get("http://worldtimeapi.org/api/timezone/Asia/Jakarta")
+                .then(({ data }) => {
+                    console.log(data.datetime);
+
+                    const date = new Date(data.datetime);
+
+                    const milliseconds = date.getTime();
+
+                    this.waktuHariIni = milliseconds;
                 })
                 .catch(({ response }) => {
                     console.error(response);
