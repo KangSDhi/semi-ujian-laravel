@@ -61,7 +61,6 @@ export default {
             })
                 .then(({ data }) => {
                     this.soal = data.data;
-                    console.log(this.soal);
                 })
                 .catch(({ response }) => {
                     console.error(response);
@@ -70,8 +69,6 @@ export default {
         getTimeApi(){
             axios.get("https://worldtimeapi.org/api/timezone/Asia/Jakarta")
                 .then(({ data }) => {
-                    console.log(data.datetime);
-
                     const date = new Date(data.datetime);
 
                     const milliseconds = date.getTime();

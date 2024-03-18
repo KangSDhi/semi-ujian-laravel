@@ -46,9 +46,6 @@ export default {
             type: Number
         },
     },
-    mounted(){
-        this.getTimeServer()
-    },
     methods: {
         changeFormatDate(dateStr){
             const inputDate = new Date(dateStr);
@@ -63,11 +60,6 @@ export default {
             const formattedDateStr = day + '-' + month + '-' + year + ' ' + hours + ':' + minutes + ':' + seconds;
 
             return formattedDateStr;
-        },
-        getTimeServer(){
-            console.log("Server");
-            console.log(this.time);
-            console.log();
         }
     }
 }
