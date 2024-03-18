@@ -68,7 +68,7 @@ export default {
                 });
         },
         getTimeApi(){
-            axios.get("http://worldtimeapi.org/api/timezone/Asia/Jakarta")
+            axios.get("https://worldtimeapi.org/api/timezone/Asia/Jakarta")
                 .then(({ data }) => {
                     console.log(data.datetime);
 
