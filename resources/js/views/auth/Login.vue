@@ -45,7 +45,7 @@
                         </div>
 
                         <div>
-                            <button type="submit"
+                            <button type="submit" :disabled="isButtonDisable"
                                 class="flex w-full justify-center rounded-md bg-gradient-to-tr from-blue-600 to-blue-400 shadow-blue-500/20 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                 Masuk
                             </button>
@@ -88,10 +88,11 @@ export default {
             isAuthError: false,
             authErrorMessage: "",
             isLoading: false,
+            isButtonDisable: false,
         };
     },
     mounted() {
-        // this.testAPI();
+        this.checkTimeGMT7()
     },
     methods: {
         testAPI() {
@@ -160,6 +161,18 @@ export default {
             this.emailErrorMessage = "";
             this.passwordErrorMessage = "";
         },
+        checkTimeGMT7(){
+            const currentDate = new Date();
+
+            const currentTimeZoneOffset = currentDate.getTimezoneOffset();
+
+            const gmtPlus7Offset = -7 * 60;
+
+            if (currentTimeZoneOffset !== gmtPlus7Offset) {
+                this.isButtonDisable = true;
+                alert("Hayo loooo!!!!, jangan korupsi waktunya");
+            }
+        }
     },
 };
 </script>

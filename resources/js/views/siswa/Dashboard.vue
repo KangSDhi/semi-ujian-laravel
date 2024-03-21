@@ -50,7 +50,8 @@ export default {
     },
     mounted() {
         this.getSoal(),
-        this.getTimeApi()
+        this.getTimeApi(),
+        this.checkTimeGMT7()
     },
     methods: {
         getSoal() {
@@ -78,6 +79,18 @@ export default {
                 .catch(({ response }) => {
                     console.error(response);
                 });
+        },
+        checkTimeGMT7(){
+            const currentDate = new Date();
+
+            const currtntTimeZoneOffset = currentDate.getTimezoneOffset();
+
+            const gmtPlus7Offset = -7 * 60;
+
+            if (currtntTimeZoneOffset !== gmtPlus7Offset) {
+                localStorage.removeItem("auth_token");
+                this.$router.push({ name: "Login Page" });
+            }
         }
     }
 }
