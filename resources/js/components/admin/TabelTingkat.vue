@@ -191,7 +191,6 @@ export default {
                     Authorization: `Bearer ${this.token}`
                 }
             }).then(({data}) => {
-                console.log(data);
                 this.items = this.data = data.data;
                 this.pagination.lastPage = Math.ceil(data.data.length / this.view);
                 this.pagination.total = data.data.length;

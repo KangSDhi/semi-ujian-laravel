@@ -18,7 +18,22 @@
                                      :token="token"
                                      :data-delete="dataDeleteTingkat"
                                      @is-dialog-to-delete-tingkat-false="deleteDialogTingkatClose($event)"/>
-                <TabelJurusan class="p-1"/>
+                <TabelJurusan class="p-1"
+                              @data-jurusan="setDataJurusan($event)"
+                              @is-form-to-make-jurusan-true="formToMakeJurusanToggle($event)"
+                              @is-form-to-edit-jurusan-true="formToEditJurusanOpen($event)"
+                              @isDialogToDeleteJurusanTrue="dialogToDeleteJurusanOpen($event)"/>
+                <FormCreateJurusan v-show="isFormToMakeJurusan"
+                                   :token="token"
+                                   @is-form-to-make-jurusan-false="formToMakeJurusanToggle($event)"/>
+                <FormEditJurusan v-show="isFormToEditJurusan"
+                                 :token="token"
+                                 :data-update="dataUpdateJurusan"
+                                 @is-form-to-edit-jurusan-false="formToEditJurusanClose($event)"/>
+                <DeleteDialogJurusan v-show="isDeleteDialogJurusan"
+                                     :token="token"
+                                     :data-delete="dataDeleteJurusan"
+                                     @is-dialog-to-delete-jurusan-false="dialogToDeleteJurusanClose($event)"/>
             </div>
         </template>
     </BaseLayout>
@@ -31,6 +46,9 @@ import FormCreateTingkat from "../../components/admin/FormCreateTingkat.vue";
 import FormEditTingkat from "../../components/admin/FormEditTingkat.vue";
 import DeleteDialogTingkat from "../../components/admin/DeleteDialogTingkat.vue";
 import TabelJurusan from "../../components/admin/TabelJurusan.vue";
+import FormCreateJurusan from "../../components/admin/FormCreateJurusan.vue";
+import FormEditJurusan from "../../components/admin/FormEditJurusan.vue";
+import DeleteDialogJurusan from "../../components/admin/DeleteDialogJurusan.vue";
 
 export default {
     data() {
@@ -42,6 +60,12 @@ export default {
             dataUpdateTingkat: [],
             isDeleteDialogTingkat: false,
             dataDeleteTingkat: [],
+            dataJurusan: [],
+            isFormToMakeJurusan: false,
+            isFormToEditJurusan: false,
+            dataUpdateJurusan: [],
+            isDeleteDialogJurusan: false,
+            dataDeleteJurusan: []
         }
     },
     components: {
@@ -50,7 +74,10 @@ export default {
         FormCreateTingkat,
         FormEditTingkat,
         DeleteDialogTingkat,
-        TabelJurusan
+        TabelJurusan,
+        FormCreateJurusan,
+        FormEditJurusan,
+        DeleteDialogJurusan
     },
     methods: {
         setDataTingkat(value) {
@@ -68,7 +95,7 @@ export default {
             this.setUpdateTingkat(value.id);
             this.isFormToEditTingkat = value.status;
         },
-        formEditTingkatClose(value){
+        formEditTingkatClose(value) {
             this.isFormToEditTingkat = value;
         },
         setDeleteTingkat(id) {
@@ -82,6 +109,36 @@ export default {
         },
         deleteDialogTingkatClose(value) {
             this.isDeleteDialogTingkat = value;
+        },
+        setDataJurusan(value) {
+            this.dataJurusan = value;
+        },
+        formToMakeJurusanToggle(value) {
+            this.isFormToMakeJurusan = value;
+        },
+        setUpdateJurusan(id) {
+            const data = JSON.parse(JSON.stringify(this.dataJurusan));
+            const index = data.findIndex((item) => item.id === id);
+            this.dataUpdateJurusan = data[index];
+        },
+        formToEditJurusanOpen(value) {
+            this.setUpdateJurusan(value.id);
+            this.isFormToEditJurusan = value.status;
+        },
+        formToEditJurusanClose(value) {
+            this.isFormToEditJurusan = value;
+        },
+        setDeleteJurusan(id) {
+            const data = JSON.parse(JSON.stringify(this.dataJurusan));
+            const index = data.findIndex((item) => item.id === id);
+            this.dataDeleteJurusan = data[index];
+        },
+        dialogToDeleteJurusanOpen(value) {
+            this.setDeleteJurusan(value.id);
+            this.isDeleteDialogJurusan = value.status;
+        },
+        dialogToDeleteJurusanClose(value) {
+            this.isDeleteDialogJurusan = value;
         }
     }
 }

@@ -52,6 +52,9 @@ Route::middleware(['auth:jwt', 'cekrole.admin'])->prefix('admin')->group(functio
     Route::put('/soal/update', [Soal::class, 'update']);
     Route::delete('/soal/delete/{id}', [Soal::class, 'destroy']);
     Route::get('/jurusan', [Jurusan::class, 'index']);
+    Route::post('/jurusan/create', [Jurusan::class, 'create']);
+    Route::put('/jurusan/update', [Jurusan::class, 'update']);
+    Route::delete('/jurusan/delete/{id}', [Jurusan::class, 'destroy']);
     Route::get('/tingkat', [Tingkat::class, 'index']);
     Route::post('/tingkat/create', [Tingkat::class, 'create']);
     Route::delete('/tingkat/delete/{id}', [Tingkat::class, 'destroy']);

@@ -10,7 +10,7 @@
                 </select>
             </div>
             <div class="grid">
-                <button
+                <button @click="formToMakeJurusanOpen"
                     class="px-5 py-2 h-10 justify-self-center bg-blue-200 dark:bg-blue-400 hover:bg-blue-300 dark:hover:bg-blue-500 text-sm me-2 rounded-lg inline-flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                          stroke="currentColor" class="w-6 h-6">
@@ -69,7 +69,7 @@
                             {{ item.nama_jurusan }}
                         </th>
                         <th class="px-6 py-4 space-x-2 text-right">
-                            <button
+                            <button @click="formToEditJurusanOpen(item.id)"
                                 class="bg-blue-200 px-2.5 py-1 text-gray-900 rounded-md inline-flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                      stroke="currentColor" class="w-4 h-4">
@@ -78,7 +78,7 @@
                                 </svg>
                                 Edit
                             </button>
-                            <button
+                            <button @click="dialogToDeleteJurusanOpen(item.id)"
                                 class="px-2.5 py-1 text-red-500 rounded-md inline-flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                      stroke="currentColor" class="w-4 h-4">
@@ -148,6 +148,12 @@ import axios from "axios";
 
 export default {
     name: "TabelJurusan",
+    emits: [
+        "dataJurusan",
+        "isFormToMakeJurusanTrue",
+        "isFormToEditJurusanTrue",
+        "isDialogToDeleteJurusanTrue"
+    ],
     data(){
         return {
             token: localStorage.getItem("auth_token"),
@@ -187,6 +193,8 @@ export default {
                 this.items = this.data = data.data;
                 this.pagination.lastPage = Math.ceil(data.data.length / this.view);
                 this.pagination.total = data.data.length;
+
+                this.$emit('dataJurusan', data.data);
 
                 this.showPages();
             }).catch(({ response }) => {
@@ -274,6 +282,23 @@ export default {
                 this.items = this.data;
             }
         },
+        formToMakeJurusanOpen(){
+            this.$emit('isFormToMakeJurusanTrue', true);
+        },
+        formToEditJurusanOpen(id){
+            const data = {
+                id: id,
+                status: true
+            };
+            this.$emit('isFormToEditJurusanTrue', data);
+        },
+        dialogToDeleteJurusanOpen(id){
+            const data = {
+                id: id,
+                status: true
+            };
+            this.$emit('isDialogToDeleteJurusanTrue', data);
+        }
     }
 }
 </script>
