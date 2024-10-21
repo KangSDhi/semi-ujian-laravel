@@ -4,6 +4,7 @@ import DashboardAdminPage from "../views/admin/Dashboard.vue";
 import DataTingkatJurusanAdminPage from "../views/admin/DataTingkatJurusan.vue";
 import DataSiswaAdminPage from "../views/admin/DataSiswa.vue";
 import DataSoalAdminPage from "../views/admin/DataSoal.vue";
+import DataKelasAdminPage from "../views/admin/DataKelas.vue"
 
 const routes = [
     {
@@ -27,10 +28,18 @@ const routes = [
             },
             {
                 path: "data-tingkat-jurusan",
-                name: "Data Tingkat Jurusan",
+                name: "Data Tingkat Jurusan Admin",
                 component: DataTingkatJurusanAdminPage,
                 meta: {
                     title: "Data Tingkat & Jurusan"
+                }
+            },
+            {
+                path: "data-kelas",
+                name: "Data Kelas Admin",
+                component: DataKelasAdminPage,
+                meta: {
+                    title: "Data Kelas"
                 }
             },
             {

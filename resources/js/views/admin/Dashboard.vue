@@ -1,10 +1,12 @@
 <template>
     <BaseLayout>
         <template #content>
-            <Bar 
-                v-if="chartSiswaTotalTingkatJurusan.loaded" 
-                :options="chartSiswaTotalTingkatJurusan.chartOptions" 
-                :data="chartSiswaTotalTingkatJurusan.chartData" />
+            <div class="grid grid-cols-4 gap-2">
+                <Bar
+                    v-if="chartSiswaTotalTingkatJurusan.loaded"
+                    :options="chartSiswaTotalTingkatJurusan.chartOptions"
+                    :data="chartSiswaTotalTingkatJurusan.chartData" />
+            </div>
         </template>
     </BaseLayout>
 </template>

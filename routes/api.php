@@ -60,6 +60,10 @@ Route::middleware(['auth:jwt', 'cekrole.admin'])->prefix('admin')->group(functio
     Route::delete('/tingkat/delete/{id}', [Tingkat::class, 'destroy']);
     Route::put('/tingkat/update', [Tingkat::class, 'update']);
     Route::get('/kelas', [Kelas::class, 'index']);
+    Route::get('/kelas/tingkat-jurusan', [Kelas::class, 'getKelasByJoinTingkatAndJurusan']);
+    Route::post('/kelas/create', [Kelas::class, 'create']);
+    Route::put('/kelas/update', [Kelas::class, 'update']);
+    Route::delete('kelas/delete/{id}', [Kelas::class, 'destroy']);
     Route::get('/chart/siswa/total/tingkat/jurusan', [SiswaChart::class, 'chartSiswaTotalTingkatJurusan']);
     Route::get('/logout', [Auth::class, 'logout']);
 });
